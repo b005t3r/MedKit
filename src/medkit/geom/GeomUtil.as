@@ -128,5 +128,76 @@ public class GeomUtil {
 
         return resultRect;
     }
+
+    /**
+     * +-----.-----.-------------+
+     * |     .     .             |
+     * |  A  .  B  .      C      |
+     * |     .     .             |
+     * ......+-----+..............
+     * |  D  |     |      E      |
+     * ......+-----+..............
+     * |     .     .             |
+     * |  F  .  G  .      H      |
+     * |     .     .             |
+     * +-----.-----.-------------+
+     * @param rect
+     * @param otherRect
+     * @param resultRects
+     * @param tempRect
+     * @return
+     */
+    public static function rectangleSubtraction(rect:Rectangle, otherRect:Rectangle, resultRects:Vector.<Rectangle> = null, tempRect:Rectangle = null):Vector.<Rectangle> {
+        var intersection:Rectangle = rectangleIntersection(rect, otherRect, tempRect);
+
+        // no intersection
+        if(intersection == null || intersection.width == 0 || intersection.height == 0) {
+            if(resultRects == null)
+                resultRects = new <Rectangle>[];
+
+            resultRects[0] = rect;
+
+            return resultRects;
+        }
+        // zero-rectangle - whole rect is covered by otherRect
+        else if(intersection.containsRect(rect)) {
+            if(resultRects == null)
+                resultRects = new <Rectangle>[];
+
+            return resultRects;
+        }
+
+        var x:Number = rect.x, y:Number = rect.y, w:Number = rect.width, h:Number = rect.height;
+        var ix:Number = intersection.x, iy:Number = intersection.y, iw:Number = intersection.width, ih:Number = intersection.height;
+
+        if(resultRects == null)
+            resultRects = new <Rectangle>[];
+
+        if(x < ix && y < iy)
+            resultRects[resultRects.length] = new Rectangle(x, y, ix - x, iy - y);
+
+        if(y < iy)
+            resultRects[resultRects.length] = new Rectangle(ix, y, iw, iy - y);
+
+        if(x + w > ix + iw && y < iy)
+            resultRects[resultRects.length] = new Rectangle(ix + iw, y, x + w - ix - iw, iy - y);
+
+        if(x < ix)
+            resultRects[resultRects.length] = new Rectangle(x, iy, ix - x, ih);
+
+        if(x + w > ix + iw)
+            resultRects[resultRects.length] = new Rectangle(ix + iw, iy, x + w - ix - iw, ih);
+
+        if(x < ix && y + h > iy + ih)
+            resultRects[resultRects.length] = new Rectangle(x, iy + ih, ix - x, y + h - iy - ih);
+
+        if(y + h > iy + ih)
+            resultRects[resultRects.length] = new Rectangle(ix, iy + ih, iw, y + h - iy - ih);
+
+        if(x + w > ix + iw && y + h > iy + ih)
+            resultRects[resultRects.length] = new Rectangle(ix + iw, iy + ih, x + w - ix - iw, y + h - iy - ih);
+
+        return resultRects;
+    }
 }
 }
