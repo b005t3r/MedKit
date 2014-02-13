@@ -4,6 +4,7 @@
  * Time: 10:58
  */
 package medkit.pattern {
+import medkit.string.StringBuilder;
 
 public class Pattern {
     private var _map:Vector.<Tile>;
@@ -41,18 +42,18 @@ public class Pattern {
     }
 
     public function toString():String {
-        var str:String = "";
+        var builder:StringBuilder = new StringBuilder(_width * (_height + 1));
 
         for(var y:int = 0; y < _height; y++) {
             for(var x:int = 0; x < _width; x++) {
                 var tile:Tile = _map[y * _width + x];
-                str += tile != null ? String(tile) : " ";
+                builder.append(tile != null ? String(tile) : " ");
             }
 
-            str += "\n";
+            builder.append("\n");
         }
 
-        return str;
+        return builder.toString();
     }
 }
 }
