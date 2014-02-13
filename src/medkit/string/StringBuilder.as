@@ -71,27 +71,18 @@ public class StringBuilder {
     }
 
     public function toString():String {
-        var str:String = "";
+        value.length = count;
 
-        for(var i:int = 0; i < count && value[i] != 0; ++i)
-            str += String.fromCharCode(value[i]);
-
-        return str;
+        return String.fromCharCode.apply(null, value);
     }
 
     protected function expandCapacity(minimumCapacity:int):void {
         var newCapacity:int = (value.length + 1) * 2;
 
-        if(newCapacity < 0) {
-            newCapacity = int.MAX_VALUE;
-        }
-        else {
-            if(minimumCapacity > newCapacity) {
-                newCapacity = minimumCapacity;
-            }
-        }
+        if(minimumCapacity > newCapacity)
+            newCapacity = minimumCapacity;
 
-        value = Arrays.copyOf(value, newCapacity);
+        value.length = newCapacity;
     }
 
     protected function appendObject(o:*):StringBuilder {
