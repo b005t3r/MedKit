@@ -32,8 +32,9 @@ public class StringBuilder {
     }
 
     public function trimToSize():void {
-        if (count < value.length)
-            value = Arrays.copyOf(value, count);
+        //if (count < value.length)
+        //    value = Arrays.copyOf(value, count);
+        value.length = count;
     }
 
     public function setLength(newLength:int):void {

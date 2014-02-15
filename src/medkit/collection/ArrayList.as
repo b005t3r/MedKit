@@ -25,10 +25,11 @@ public class ArrayList extends AbstractList {
     public function trimToSize():void {
         modCount++;
 
-        var oldCapacity:int = elementData.length;
+        //var oldCapacity:int = elementData.length;
 
-        if (_size < oldCapacity)
-            elementData = Arrays.copyOf(elementData, _size);
+        //if (_size < oldCapacity)
+        //    elementData = Arrays.copyOf(elementData, _size);
+        elementData.length = _size;
     }
 
     public function ensureCapacity(minCapacity:int):void {
@@ -43,7 +44,8 @@ public class ArrayList extends AbstractList {
                 newCapacity = minCapacity;
 
             // minCapacity is usually close to size, so this is a win:
-            elementData = Arrays.copyOf(elementData, newCapacity);
+            //elementData = Arrays.copyOf(elementData, newCapacity);
+            elementData.length = newCapacity;
         }
     }
 
