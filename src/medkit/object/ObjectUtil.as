@@ -5,7 +5,7 @@
  */
 
 package medkit.object {
-import medkit.collection.Arrays;
+import medkit.collection.ArrayUtil;
 import medkit.object.error.CloneNotRegisteredError;
 
 public class ObjectUtil {
@@ -148,7 +148,7 @@ public class ObjectUtil {
         if(context == null) {
             arrayCopy = new Array(array.length);
 
-            Arrays.arrayCopy(array, 0, arrayCopy, 0, array.length);
+            ArrayUtil.arrayCopy(array, 0, arrayCopy, 0, array.length);
         }
         else {
             // get cloned instance if available
@@ -167,7 +167,7 @@ public class ObjectUtil {
                         arrayCopy = new Array(array.length);
                         context.registerClone(array, arrayCopy);
 
-                        Arrays.arrayCopy(array, 0, arrayCopy, 0, array.length);
+                        ArrayUtil.arrayCopy(array, 0, arrayCopy, 0, array.length);
                         break;
 
                     default:

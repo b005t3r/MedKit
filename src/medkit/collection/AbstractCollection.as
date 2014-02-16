@@ -30,13 +30,13 @@ public class AbstractCollection implements Collection {
 
                     newCap = int.MAX_VALUE;
                 }
-                r = Arrays.copyOf(r, newCap);
+                r = ArrayUtil.copyOf(r, newCap);
             }
             r[i++] = it.next();
         }
 
         // trim if overallocated
-        return (i == r.length) ? r : Arrays.copyOf(r, i);
+        return (i == r.length) ? r : ArrayUtil.copyOf(r, i);
     }
 
     public function iterator():Iterator {
@@ -179,7 +179,7 @@ public class AbstractCollection implements Collection {
 
         for (var i:int = 0; i < r.length; i++) {
             if (! it.hasNext()) // fewer elements than expected
-                return Arrays.copyOf(r, i);
+                return ArrayUtil.copyOf(r, i);
 
             r[i] = it.next();
         }

@@ -6,7 +6,7 @@
 
 package medkit.string {
 
-import medkit.collection.Arrays;
+import medkit.collection.ArrayUtil;
 
 public class StringBuilder {
     // TODO: should be backed up by ByteArray instead of Array

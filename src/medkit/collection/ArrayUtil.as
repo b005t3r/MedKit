@@ -6,7 +6,7 @@
 
 package medkit.collection {
 
-public class Arrays {
+public class ArrayUtil {
     public static function copyOf(array:Array, capacity:int):Array {
         var copy:Array = new Array(capacity);
 

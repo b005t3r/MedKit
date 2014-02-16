@@ -111,7 +111,7 @@ public class ArrayList extends AbstractList {
     }
 
     override public function toArray():Array {
-        return Arrays.copyOf(elementData, _size);
+        return ArrayUtil.copyOf(elementData, _size);
     }
 
     override public function get (index:int):* {
@@ -141,7 +141,7 @@ public class ArrayList extends AbstractList {
 
         ensureCapacity(_size + 1);  // Increments modCount!!
 
-        Arrays.arrayCopy(elementData, index, elementData, index + 1, _size - index);
+        ArrayUtil.arrayCopy(elementData, index, elementData, index + 1, _size - index);
         elementData[index] = o;
         _size++;
     }
@@ -174,7 +174,7 @@ public class ArrayList extends AbstractList {
         var numMoved:int = _size - index - 1;
 
         if (numMoved > 0)
-            Arrays.arrayCopy(elementData, index + 1, elementData, index, numMoved);
+            ArrayUtil.arrayCopy(elementData, index + 1, elementData, index, numMoved);
 
         elementData[--_size] = null; // Let gc do its work
 
@@ -218,7 +218,7 @@ public class ArrayList extends AbstractList {
 
         ensureCapacity(_size + numNew);  // Increments modCount
 
-        Arrays.arrayCopy(elementData, index, elementData, index + numNew, numMoved);
+        ArrayUtil.arrayCopy(elementData, index, elementData, index + numNew, numMoved);
 
         while (e.hasNext())
             elementData[index++] = e.next();
@@ -248,7 +248,7 @@ public class ArrayList extends AbstractList {
         modCount++;
         var numMoved:int = _size - toIndex;
 
-        Arrays.arrayCopy(elementData, toIndex, elementData, fromIndex, numMoved);
+        ArrayUtil.arrayCopy(elementData, toIndex, elementData, fromIndex, numMoved);
 
         // Let gc do its work
         var newSize:int = _size - (toIndex - fromIndex);
@@ -275,7 +275,7 @@ public class ArrayList extends AbstractList {
                 elementData[w++] = elementData[r];
 
         if (r != _size) {
-            Arrays.arrayCopy(elementData, r, elementData, w, _size - r);
+            ArrayUtil.arrayCopy(elementData, r, elementData, w, _size - r);
             w += _size - r;
         }
 
@@ -297,7 +297,7 @@ public class ArrayList extends AbstractList {
         var numMoved:int = _size - index - 1;
 
         if(numMoved > 0)
-            Arrays.arrayCopy(elementData, index + 1, elementData, index, numMoved);
+            ArrayUtil.arrayCopy(elementData, index + 1, elementData, index, numMoved);
 
         elementData[--_size] = null; // Let gc do its work
     }
