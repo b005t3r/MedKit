@@ -16,6 +16,36 @@ public class ObjectUtil {
 
             return e1.equals(e2);
         }
+        else if(o1 as Array && o2 as Array) {
+            var a1:Array = o1 as Array;
+            var a2:Array = o2 as Array;
+
+            if(a1.length != a2.length) {
+                return false;
+            }
+            else {
+                for(var i:int = 0; i < a1.length; ++i)
+                    if(! equals(a1[i], a2[i]))
+                        return false;
+
+                return true;
+            }
+        }
+        else if(o1 as Vector && o2 as Vector) {
+            var v1:Vector = o1 as Vector;
+            var v2:Vector = o2 as Vector;
+
+            if(v1.length != v2.length) {
+                return false;
+            }
+            else {
+                for(var j:int = 0; j < v1.length; ++j)
+                    if(! equals(v1[j], v2[j]))
+                        return false;
+
+                return true;
+            }
+        }
         else if(typeof(o1) == typeof(o2)) {
             return o1 == o2;
         }
@@ -43,10 +73,31 @@ public class ObjectUtil {
             }
             else {
                 for(var i:int = 0; i < a1.length; ++i) {
-                    var res:int = compare(a1[i], a2[i]);
+                    var aRes:int = compare(a1[i], a2[i]);
 
-                    if(res != 0)
-                        return res;
+                    if(aRes != 0)
+                        return aRes;
+                }
+
+                return 0;
+            }
+        }
+        else if(o1 as Vector && o2 as Vector) {
+            var v1:Vector = o1 as Vector;
+            var v2:Vector = o2 as Vector;
+
+            if(v1.length < v2.length) {
+                return -1;
+            }
+            else if(v1.length > v2.length) {
+                return 1;
+            }
+            else {
+                for(var j:int = 0; j < v1.length; ++j) {
+                    var vRes:int = compare(v1[j], v2[j]);
+
+                    if(vRes != 0)
+                        return vRes;
                 }
 
                 return 0;
@@ -65,10 +116,10 @@ public class ObjectUtil {
             return i1 - i2;
         }
         else if((o1 is int || o1 is uint || o1 is Number || o1 is String) && (o2 is int || o2 is uint || o2 is Number || o2 is String)) {
-            var v1:String = o1 as String;
-            var v2:String = o2 as String;
+            var x1:String = o1 as String;
+            var x2:String = o2 as String;
 
-            return compare(v1, v2);
+            return compare(x1, x2);
         }
         else {
             throw new TypeError("objects can not be compared - o1: " + o1 + ", o2: " + o2);
