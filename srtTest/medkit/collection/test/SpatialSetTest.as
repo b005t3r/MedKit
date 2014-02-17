@@ -6,6 +6,8 @@
 package medkit.collection.test {
 import flash.geom.Rectangle;
 
+import medkit.collection.ArrayList;
+
 import medkit.collection.Collection;
 import medkit.collection.iterator.Iterator;
 
@@ -20,19 +22,69 @@ import org.flexunit.asserts.assertFalse;
 import org.flexunit.asserts.assertTrue;
 
 public class SpatialSetTest extends SetTest {
+    private var spatialSet:SpatialSet;
+
     private var rect1:Rectangle, rect2:Rectangle, rect3:Rectangle;
     private var spatial1:SpatialRectangle, spatial2:SpatialRectangle, spatial3:SpatialRectangle;
 
+    private var overlapping1:Rectangle, overlapping2:SpatialRectangle, notOverlapping1:Rectangle, notOverlapping2:SpatialRectangle;
+
     [Before]
     public function setUp():void {
-        collection = set = new SpatialSet([5, -50, 50, 10, -75, 75], new TestSpatializer());
+        collection = set = spatialSet =new SpatialSet([5, -50, 50, 10, -75, 75], new TestSpatializer());
 
         addContent();
     }
 
     [After]
     public function tearDown():void {
-        collection = set = null;
+        collection = set = spatialSet =null;
+    }
+
+    [Test]
+    public function testSearch():void {
+        var list:ArrayList = new ArrayList();
+        var result:Collection;
+
+        result = spatialSet.search(overlapping1);
+
+        assertTrue(result.contains(spatial1));
+        assertTrue(result.contains(rect2));
+        assertEquals(result.size(), 2);
+
+        result = spatialSet.search(overlapping1, true);
+
+        assertTrue(result.contains(spatial1));
+        assertTrue(result.contains(rect2));
+        assertTrue(result.size() >= 2);
+
+        result = spatialSet.search(overlapping2, true, list);
+
+        assertEquals(result, list);
+        assertTrue(result.contains(spatial1));
+        assertTrue(result.contains(spatial2));
+        assertTrue(result.contains(rect1));
+        assertTrue(result.size() >= 3);
+
+        list.clear();
+
+        result = spatialSet.search(overlapping2, false, list);
+
+        assertEquals(result, list);
+        assertTrue(result.contains(spatial1));
+        assertTrue(result.contains(spatial2));
+        assertTrue(result.contains(rect1));
+        assertEquals(result.size(), 3);
+
+        result = spatialSet.search(notOverlapping1);
+
+        assertEquals(result.size(), 0);
+
+        list.clear();
+        result = spatialSet.search(notOverlapping2, false, list);
+
+        assertEquals(result, list);
+        assertEquals(result.size(), 0);
     }
 
     [Test]
@@ -268,6 +320,12 @@ public class SpatialSetTest extends SetTest {
 
         set.add(rect1); set.add(rect2); set.add(rect3);
         set.add(spatial1); set.add(spatial2); set.add(spatial3);
+
+        overlapping1 = new Rectangle(-5, -45, 55, 35); // overlaps: spatial1, rect2
+        overlapping2 = new SpatialRectangle(-20, -5, 45, 45); // overlaps: spatial1, spatial2, rect1
+
+        notOverlapping1 = new Rectangle(-100, -60, 20, 20);
+        notOverlapping2 = new SpatialRectangle(20, 25, 15, 15);
     }
 }
 }
