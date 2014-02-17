@@ -88,6 +88,115 @@ public class SpatialSetTest extends SetTest {
     }
 
     [Test]
+    public function testUpdate():void {
+        var result:Collection;
+
+        result = spatialSet.search(overlapping1);
+
+        assertTrue(result.contains(spatial1));
+        assertTrue(result.contains(rect2));
+        assertEquals(result.size(), 2);
+
+        result = spatialSet.search(overlapping2);
+
+        assertTrue(result.contains(spatial1));
+        assertTrue(result.contains(spatial2));
+        assertTrue(result.contains(rect1));
+        assertEquals(result.size(), 3);
+
+        result = spatialSet.search(notOverlapping1);
+
+        assertEquals(result.size(), 0);
+
+        result = spatialSet.search(notOverlapping2);
+
+        assertEquals(result.size(), 0);
+
+        spatialSet.mark(rect1);
+        rect1.offset(20, 5); // now does not overlap with overlapping2 and does overlap with notOverlapping2
+        spatialSet.updateMarked();
+
+        result = spatialSet.search(overlapping1);
+
+        assertTrue(result.contains(spatial1));
+        assertTrue(result.contains(rect2));
+        assertEquals(result.size(), 2);
+
+        result = spatialSet.search(overlapping2);
+
+        assertTrue(result.contains(spatial1));
+        assertTrue(result.contains(spatial2));
+        assertFalse(result.contains(rect1));
+        assertEquals(result.size(), 2);
+
+        result = spatialSet.search(notOverlapping1);
+
+        assertEquals(result.size(), 0);
+
+        result = spatialSet.search(notOverlapping2);
+
+        assertTrue(result.contains(rect1));
+        assertEquals(result.size(), 1);
+
+        spatialSet.mark(rect1);
+        spatialSet.mark(spatial2);
+
+        rect1.offset(-20, -5); // returns to the previous position
+        spatial2.offset(-40, -70); // now does not overlap with overlapping2 and does overlap with notOverlapping1
+
+        spatialSet.updateMarked(false);
+
+        result = spatialSet.search(overlapping1);
+
+        assertTrue(result.contains(spatial1));
+        assertTrue(result.contains(rect2));
+        assertEquals(result.size(), 2);
+
+        result = spatialSet.search(overlapping2);
+
+        assertTrue(result.contains(spatial1));
+        assertFalse(result.contains(spatial2));
+        assertTrue(result.contains(rect1));
+        assertEquals(result.size(), 2);
+
+        result = spatialSet.search(notOverlapping1);
+
+        assertTrue(result.contains(spatial2));
+        assertEquals(result.size(), 1);
+
+        result = spatialSet.search(notOverlapping2);
+
+        assertEquals(result.size(), 0);
+
+        rect1.offset(20, 5); // now does not overlap with overlapping2 and does overlap with notOverlapping2
+        spatial2.offset(40, 70); // returns to the previous position
+
+        spatialSet.updateMarked();
+
+        result = spatialSet.search(overlapping1);
+
+        assertTrue(result.contains(spatial1));
+        assertTrue(result.contains(rect2));
+        assertEquals(result.size(), 2);
+
+        result = spatialSet.search(overlapping2);
+
+        assertTrue(result.contains(spatial1));
+        assertTrue(result.contains(spatial2));
+        assertFalse(result.contains(rect1));
+        assertEquals(result.size(), 2);
+
+        result = spatialSet.search(notOverlapping1);
+
+        assertEquals(result.size(), 0);
+
+        result = spatialSet.search(notOverlapping2);
+
+        assertTrue(result.contains(rect1));
+        assertEquals(result.size(), 1);
+    }
+
+    [Test]
     override public function testContains():void {
         assertTrue(collection.contains(rect1));
         assertTrue(collection.contains(spatial2));
@@ -263,7 +372,7 @@ public class SpatialSetTest extends SetTest {
         assertTrue(collection.contains(rect3));
         assertTrue(collection.contains(newValue));
 
-        assertEquals(collection.size(), 12);
+        assertEquals(collection.size(), 7);
     }
 
     [Test]
@@ -344,6 +453,11 @@ class SpatialRectangle implements Spatial, Equalable {
         this.y = y;
         this.width = w;
         this.height = h;
+    }
+
+    public function offset(x:Number, y:Number):void {
+        this.x += x;
+        this.y += y;
     }
 
     public function get indexCount():int { return 2; }

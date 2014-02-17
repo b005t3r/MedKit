@@ -9,7 +9,6 @@ import medkit.collection.ArrayList;
 import medkit.collection.Collection;
 import medkit.collection.HashMap;
 import medkit.collection.HashSet;
-import medkit.collection.LinkedList;
 import medkit.collection.iterator.Iterator;
 import medkit.object.Cloneable;
 import medkit.object.CloningContext;
@@ -23,6 +22,10 @@ public class SpatialSet extends AbstractSet {
     private var _bucketDefs:Vector.<BucketDefinition>;
 
     private var _spatializer:Spatializer;
+
+    private var _marked:HashSet;
+    private var _markedLeftRight:Vector.<int>
+    private var _markedIndex:Vector.<int>;
 
     private var _tempLeftRight:Vector.<int>;
     private var _tempIndex:Vector.<int>;
@@ -59,6 +62,10 @@ public class SpatialSet extends AbstractSet {
         _bucketContents     = new Vector.<Collection>(maxBuckets, true);
         _spatializer        = spatializer;
         _maxBuckets         = maxBuckets;
+
+        _marked             = new HashSet();
+        _markedIndex        = new Vector.<int>((count / 3), true);
+        _markedLeftRight    = new Vector.<int>(2 * _markedIndex.length, true);
 
         _tempIndex          = new Vector.<int>((count / 3), true);
         _tempLeftRight      = new Vector.<int>(2 * _tempIndex.length, true);
@@ -100,6 +107,84 @@ public class SpatialSet extends AbstractSet {
         return result;
     }
 
+    public function mark(o:*):void {
+        if(_size == 0)
+            throw UninitializedError("this set is empty");
+
+        calculateRange(o, _tempLeftRight, _tempIndex);
+
+        _tempBucketData.object = o;
+        _tempBucketData.leftRight = _tempLeftRight;
+
+        if(_marked.contains(_tempBucketData))
+            return;
+
+        do {
+            var hash:uint   = calculateHash(_tempIndex);
+            var bucket:Collection = _bucketContents[int(hash % _maxBuckets)];
+
+            if(bucket == null || ! bucket.contains(_tempBucketData))
+                continue;
+
+            _marked.add(new BucketData(o, _tempLeftRight));
+            return;
+        } while(incIndex(_tempIndex, _tempLeftRight));
+
+        throw new ArgumentError("object not added to set: " + o);
+    }
+
+    public function markAll(c:Collection):void {
+        var it:Iterator = c.iterator();
+
+        while(it.hasNext())
+            mark(it.next());
+    }
+
+    public function updateMarked(unmark:Boolean = true):void {
+        var it:Iterator = _marked.iterator();
+
+        while(it.hasNext()) {
+            var oldData:BucketData = it.next();
+
+            calculateRange(oldData.object, _tempLeftRight, _tempIndex);
+
+            _tempBucketData.object      = oldData.object;
+            _tempBucketData.leftRight   = _tempLeftRight;
+
+            var newData:BucketData = _tempBucketData;
+            var dataToAdd:BucketData = null;
+
+            unionRange(oldData.leftRight, newData.leftRight, _markedLeftRight, _markedIndex);
+
+            do {
+                var hash:uint = calculateHash(_markedIndex);
+                var bucket:Collection = _bucketContents[int(hash % _maxBuckets)];
+
+                // bucket already contains this object - remove the old one
+                if(inRange(_markedIndex, oldData.leftRight))
+                    bucket.remove(oldData); // bucket cannot be null
+
+                // updated object doesn't go into this bucket
+                if(! inRange(_markedIndex, newData.leftRight))
+                    continue;
+
+                if(bucket == null) {
+                    //bucket = new LinkedList();
+                    bucket = new HashSet();
+                    _bucketContents[int(hash % _maxBuckets)] = bucket;
+                }
+
+                if(dataToAdd == null)
+                    dataToAdd = new BucketData(newData.object, newData.leftRight);
+
+                bucket.add(dataToAdd);
+            } while(incIndex(_markedIndex, _markedLeftRight));
+
+            if(unmark)  it.remove();
+            else        oldData.leftRight = dataToAdd.leftRight;
+        }
+    }
+
     override public function iterator():Iterator { return new SpatialSetIterator(this); }
 
     override public function size():int { return _size; }
@@ -112,6 +197,7 @@ public class SpatialSet extends AbstractSet {
         calculateRange(o, _tempLeftRight, _tempIndex);
 
         _tempBucketData.object = o;
+        _tempBucketData.leftRight = _tempLeftRight;
 
         do {
             var hash:uint   = calculateHash(_tempIndex);
@@ -137,7 +223,8 @@ public class SpatialSet extends AbstractSet {
             var bucket:Collection   = _bucketContents[int(hash % _maxBuckets)];
 
             if(bucket == null) {
-                bucket = new LinkedList();
+                //bucket = new LinkedList();
+                bucket = new HashSet();
                 _bucketContents[int(hash % _maxBuckets)] = bucket;
             }
 
@@ -157,6 +244,7 @@ public class SpatialSet extends AbstractSet {
         var removed:Boolean = false;
 
         _tempBucketData.object = o;
+        _tempBucketData.leftRight = _tempLeftRight;
 
         do {
             var hash:uint           = calculateHash(_tempIndex);
@@ -216,7 +304,8 @@ public class SpatialSet extends AbstractSet {
             if(bucket == null)
                 continue;
 
-            var clonedBucket:Collection = new LinkedList();
+            //var clonedBucket:Collection = new LinkedList();
+            var clonedBucket:Collection = new HashSet();
 
             var it:Iterator = bucket.iterator();
             while(it.hasNext()) {
@@ -301,6 +390,22 @@ public class SpatialSet extends AbstractSet {
         return false;
     }
 
+    private function inRange(index:Vector.<int>, leftRight:Vector.<int>):Boolean {
+        var count:int = index.length;
+        for(var i:int = 0; i < count; i++) {
+            var ind:int     = index[i];
+            var left:int    = leftRight[int(i * 2)];
+            var right:int   = leftRight[int(i * 2 + 1)];
+
+            if(ind >= left && ind <= right)
+                continue;
+
+            return false;
+        }
+
+        return true;
+    }
+
     private function calculateHash(index:Vector.<int>):uint {
         var hash:uint = 1;
 
@@ -345,6 +450,22 @@ public class SpatialSet extends AbstractSet {
         }
         else {
             throw new ArgumentError("object does not implement Spatial nor Spatializer is set: " + obj);
+        }
+    }
+
+    private function unionRange(leftRightA:Vector.<int>, leftRightB:Vector.<int>, outLeftRight:Vector.<int>, outIndex:Vector.<int>):void {
+        var count:int = outIndex.length;
+        for(var i:int = 0; i < count; i++) {
+            var leftA:int    = leftRightA[int(i * 2)];
+            var rightA:int   = leftRightA[int(i * 2 + 1)];
+            var leftB:int    = leftRightB[int(i * 2)];
+            var rightB:int   = leftRightB[int(i * 2 + 1)];
+
+            if(leftA < leftB)   outIndex[i] = outLeftRight[int(i * 2)] = leftA;
+            else                outIndex[i] = outLeftRight[int(i * 2)] = leftB;
+
+            if(rightA > rightB) outLeftRight[int(i * 2 + 1)] = rightA;
+            else                outLeftRight[int(i * 2 + 1)] = rightB;
         }
     }
 
