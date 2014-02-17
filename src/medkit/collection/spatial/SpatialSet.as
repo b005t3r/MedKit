@@ -148,11 +148,7 @@ public class SpatialSet extends AbstractSet {
 
             calculateRange(oldData.object, _tempLeftRight, _tempIndex);
 
-            _tempBucketData.object      = oldData.object;
-            _tempBucketData.leftRight   = _tempLeftRight;
-
-            var newData:BucketData = _tempBucketData;
-            var dataToAdd:BucketData = null;
+            var newData:BucketData = new BucketData(oldData.object, _tempLeftRight);
 
             unionRange(oldData.leftRight, newData.leftRight, _markedLeftRight, _markedIndex);
 
@@ -169,19 +165,15 @@ public class SpatialSet extends AbstractSet {
                     continue;
 
                 if(bucket == null) {
-                    //bucket = new LinkedList();
                     bucket = new HashSet();
                     _bucketContents[int(hash % _maxBuckets)] = bucket;
                 }
 
-                if(dataToAdd == null)
-                    dataToAdd = new BucketData(newData.object, newData.leftRight);
-
-                bucket.add(dataToAdd);
+                bucket.add(newData);
             } while(incIndex(_markedIndex, _markedLeftRight));
 
             if(unmark)  it.remove();
-            else        oldData.leftRight = dataToAdd.leftRight;
+            else        oldData.leftRight = newData.leftRight;
         }
     }
 
