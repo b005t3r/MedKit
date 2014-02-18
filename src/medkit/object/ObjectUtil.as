@@ -46,6 +46,10 @@ public class ObjectUtil {
                 return true;
             }
         }
+        /*
+        else {
+            return o1 == o2;
+        }*/
         else if(typeof(o1) == typeof(o2)) {
             return o1 == o2;
         }

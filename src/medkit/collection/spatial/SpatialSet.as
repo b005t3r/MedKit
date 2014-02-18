@@ -18,7 +18,7 @@ public class SpatialSet extends AbstractSet {
     private var _size:int = 0;
     private var _maxBuckets:int;
 
-    internal var _bucketContents:Vector.<Collection>;
+    internal var _bucketContents:Vector.<Vector.<BucketData>>;
     private var _bucketDefs:Vector.<BucketDefinition>;
 
     private var _spatializer:Spatializer;
@@ -59,7 +59,7 @@ public class SpatialSet extends AbstractSet {
             _bucketDefs[i / 3] = new BucketDefinition(min, max, bucketSize);
         }
 
-        _bucketContents     = new Vector.<Collection>(maxBuckets, true);
+        _bucketContents     = new Vector.<Vector.<BucketData>>(maxBuckets, true);
         _spatializer        = spatializer;
         _maxBuckets         = maxBuckets;
 
@@ -73,7 +73,7 @@ public class SpatialSet extends AbstractSet {
         _tempBucketDataSet  = new HashSet();
     }
 
-    public function search(overlapping:*, potential:Boolean = false, result:Collection = null):Collection {
+    public function search(overlapping:*, potential:Boolean = false, includeEdges:Boolean = true, result:Collection = null):Collection {
         if(result == null)
             result = new ArrayList();
 
@@ -82,24 +82,23 @@ public class SpatialSet extends AbstractSet {
         _tempBucketDataSet.clear();
 
         do {
-            var hash:uint           = calculateHash(_tempIndex);
-            var bucket:Collection   = _bucketContents[int(hash % _maxBuckets)];
+            var hash:uint                   = calculateHash(_tempIndex);
+            var bucket:Vector.<BucketData>  = _bucketContents[int(hash % _maxBuckets)];
 
             if(bucket == null)
                 continue;
 
-            var data:BucketData, it:Iterator = bucket.iterator();
+            var count:int = bucket.length;
+            for(var i:int = 0; i < count; i++) {
+                var data:BucketData = bucket[i];
 
-            while(it.hasNext()) {
-                data = it.next();
+                if(! potential && ! intersects(overlapping, data.object, includeEdges))
+                    continue;
 
                 if(_tempBucketDataSet.contains(data))
                     continue;
 
-                if(! potential && ! intersects(overlapping, data.object))
-                    continue;
-
-                 result.add(data.object);
+                result.add(data.object);
                 _tempBucketDataSet.add(data);
             }
         } while(incIndex(_tempIndex, _tempLeftRight));
@@ -120,10 +119,10 @@ public class SpatialSet extends AbstractSet {
             return;
 
         do {
-            var hash:uint   = calculateHash(_tempIndex);
-            var bucket:Collection = _bucketContents[int(hash % _maxBuckets)];
+            var hash:uint                   = calculateHash(_tempIndex);
+            var bucket:Vector.<BucketData>  = _bucketContents[int(hash % _maxBuckets)];
 
-            if(bucket == null || ! bucket.contains(_tempBucketData))
+            if(bucket == null || indexOfBucketData(_tempBucketData, bucket) < 0)
                 continue;
 
             _marked.add(new BucketData(o, _tempLeftRight));
@@ -153,23 +152,23 @@ public class SpatialSet extends AbstractSet {
             unionRange(oldData.leftRight, newData.leftRight, _markedLeftRight, _markedIndex);
 
             do {
-                var hash:uint = calculateHash(_markedIndex);
-                var bucket:Collection = _bucketContents[int(hash % _maxBuckets)];
+                var hash:uint                   = calculateHash(_markedIndex);
+                var bucket:Vector.<BucketData>  = _bucketContents[int(hash % _maxBuckets)];
 
                 // bucket already contains this object - remove the old one
                 if(inRange(_markedIndex, oldData.leftRight))
-                    bucket.remove(oldData); // bucket cannot be null
+                    bucket.splice(indexOfBucketData(oldData, bucket), 1); // bucket cannot be null
 
                 // updated object doesn't go into this bucket
                 if(! inRange(_markedIndex, newData.leftRight))
                     continue;
 
                 if(bucket == null) {
-                    bucket = new HashSet();
+                    bucket = new <BucketData>[];
                     _bucketContents[int(hash % _maxBuckets)] = bucket;
                 }
 
-                bucket.add(newData);
+                bucket[bucket.length] = newData;
             } while(incIndex(_markedIndex, _markedLeftRight));
 
             if(unmark)  it.remove();
@@ -192,10 +191,13 @@ public class SpatialSet extends AbstractSet {
         _tempBucketData.leftRight = _tempLeftRight;
 
         do {
-            var hash:uint   = calculateHash(_tempIndex);
-            var bucket:Collection = _bucketContents[int(hash % _maxBuckets)];
+            var hash:uint                   = calculateHash(_tempIndex);
+            var bucket:Vector.<BucketData>  = _bucketContents[int(hash % _maxBuckets)];
 
-            if(bucket != null && bucket.contains(_tempBucketData))
+            if(bucket == null)
+                continue;
+
+            if(indexOfBucketData(_tempBucketData, bucket) >= 0)
                 return true;
         } while(incIndex(_tempIndex, _tempLeftRight));
 
@@ -211,16 +213,16 @@ public class SpatialSet extends AbstractSet {
         var data:BucketData = new BucketData(o, _tempLeftRight);
 
         do {
-            var hash:uint           = calculateHash(_tempIndex);
-            var bucket:Collection   = _bucketContents[int(hash % _maxBuckets)];
+            var hash:uint                   = calculateHash(_tempIndex);
+            var bucket:Vector.<BucketData>  = _bucketContents[int(hash % _maxBuckets)];
 
             if(bucket == null) {
-                //bucket = new LinkedList();
-                bucket = new HashSet();
+                bucket = new <BucketData>[];
                 _bucketContents[int(hash % _maxBuckets)] = bucket;
             }
 
-            added = bucket.add(data);
+            bucket[bucket.length] = data;
+            added = true;
         } while(incIndex(_tempIndex, _tempLeftRight));
 
         if(added) _size++;
@@ -239,14 +241,19 @@ public class SpatialSet extends AbstractSet {
         _tempBucketData.leftRight = _tempLeftRight;
 
         do {
-            var hash:uint           = calculateHash(_tempIndex);
-            var bucket:Collection   = _bucketContents[int(hash % _maxBuckets)];
+            var hash:uint                   = calculateHash(_tempIndex);
+            var bucket:Vector.<BucketData>  = _bucketContents[int(hash % _maxBuckets)];
 
             if(bucket == null)
                 continue;
 
-            var rem:Boolean = bucket.remove(_tempBucketData);
-            removed         = removed ||rem;
+            var index:int = indexOfBucketData(_tempBucketData, bucket);
+
+            if(index < 0)
+                continue;
+
+            bucket.splice(index, 1);
+            removed = true;
         } while(incIndex(_tempIndex, _tempLeftRight));
 
         if(removed) _size--;
@@ -261,10 +268,10 @@ public class SpatialSet extends AbstractSet {
 
         var count:int = _bucketContents.length;
         for(var i:int = 0; i < count; i++) {
-            var bucket:Collection = _bucketContents[i];
+            var bucket:Vector.<BucketData> = _bucketContents[i];
 
             if(bucket != null)
-                bucket.clear();
+                bucket.length = 0;
         }
     }
 
@@ -291,24 +298,24 @@ public class SpatialSet extends AbstractSet {
 
         var bucketCount:int = _bucketContents.length;
         for(var b:int = 0; b < bucketCount; b++) {
-            var bucket:Collection = _bucketContents[b];
+            var bucket:Vector.<BucketData> = _bucketContents[b];
 
             if(bucket == null)
                 continue;
 
             //var clonedBucket:Collection = new LinkedList();
-            var clonedBucket:Collection = new HashSet();
+            var clonedBucket:Vector.<BucketData> = new Vector.<BucketData>(bucket.length);
 
-            var it:Iterator = bucket.iterator();
-            while(it.hasNext()) {
-                var data:BucketData = it.next();
+            var count:int = bucket.length;
+            for(var i:int = 0; i < count; i++) {
+                var data:BucketData = bucket[i];
 
                 var o:* = cloningContext != null
                     ? ObjectUtil.clone(data.object, cloningContext)
                     : data.object
                 ;
 
-                clonedBucket.add(new BucketData(o, data.leftRight));
+                clonedBucket[i] = new BucketData(o, data.leftRight);
             }
 
             clone._bucketContents[b] = clonedBucket;
@@ -319,43 +326,91 @@ public class SpatialSet extends AbstractSet {
         return clone;
     }
 
-    private function intersects(o1:*, o2:*):Boolean {
+    private function indexOfBucketData(data:BucketData, bucket:Vector.<BucketData>):int {
+        var count:int = bucket.length;
+        for(var i:int = 0; i < count; i++) {
+            var d:BucketData = bucket[i];
+
+            if(! ObjectUtil.equals(d.object, data.object))
+                continue;
+
+            return i;
+        }
+
+        return -1;
+    }
+
+    private function intersects(o1:*, o2:*, includeEdges:Boolean):Boolean {
         var s1:Spatial = o1 as Spatial;
         var s2:Spatial = o2 as Spatial;
 
-        var indexCount:int = s1 != null ? s1.indexCount : _spatializer.indexCount(o1);
+        var i:int, indexCount:int = s1 != null ? s1.indexCount : _spatializer.indexCount(o1);
 
-        for(var i:int = 0; i < indexCount; i++) {
-            var min1:Number, min2:Number, max1:Number, max2:Number;
+        var min1:Number, min2:Number, max1:Number, max2:Number, x1:Number, x2:Number;
 
-            if(s1 != null) {
+        if(s1 != null && s2 != null) {
+            for(i = 0; i < indexCount; i++) {
                 min1 = s1.minValue(i);
                 max1 = s1.maxValue(i);
-            }
-            else if(_spatializer != null) {
-                min1 = _spatializer.minValue(o1, i);
-                max1 = _spatializer.maxValue(o1, i);
-            }
-            else {
-                throw new ArgumentError("object does not implement Spatial nor Spatializer is set: " + o1);
-            }
-
-            if(s2 != null) {
                 min2 = s2.minValue(i);
                 max2 = s2.maxValue(i);
+
+                x1 = min1 > min2 ? min1 : min2;
+                x2 = max1 < max2 ? max1 : max2;
+
+                if(includeEdges) {
+                    if(x2 - x1 < 0)
+                        return false;
+                }
+                else {
+                    if(x2 - x1 <= 0)
+                        return false;
+                }
             }
-            else if(_spatializer != null) {
+        }
+        else if(s1 != null || s2 != null) {
+            var s:Spatial, o:*;
+            if(s1 != null)  { s = s1; o = o2; }
+            else            { s = s2; o = o1; }
+
+            for(i = 0; i < indexCount; i++) {
+                min1 = s.minValue(i);
+                max1 = s.maxValue(i);
+                min2 = _spatializer.minValue(o, i);
+                max2 = _spatializer.maxValue(o, i);
+
+                x1 = min1 > min2 ? min1 : min2;
+                x2 = max1 < max2 ? max1 : max2;
+
+                if(includeEdges) {
+                    if(x2 - x1 < 0)
+                        return false;
+                }
+                else {
+                    if(x2 - x1 <= 0)
+                        return false;
+                }
+            }
+        }
+        else {
+            for(i = 0; i < indexCount; i++) {
+                min1 = _spatializer.minValue(o1, i);
+                max1 = _spatializer.maxValue(o1, i);
                 min2 = _spatializer.minValue(o2, i);
                 max2 = _spatializer.maxValue(o2, i);
-            }
-            else {
-                throw new ArgumentError("object does not implement Spatial nor Spatializer is set: " + o1);
-            }
 
-            var x1:Number = Math.max(min1, min2), x2:Number = Math.min(max1, max2);
+                x1 = min1 > min2 ? min1 : min2;
+                x2 = max1 < max2 ? max1 : max2;
 
-            if(x2 - x1 < 0)
-                return false;
+                if(includeEdges) {
+                    if(x2 - x1 < 0)
+                        return false;
+                }
+                else {
+                    if(x2 - x1 <= 0)
+                        return false;
+                }
+            }
         }
 
         return true;
@@ -399,6 +454,7 @@ public class SpatialSet extends AbstractSet {
     }
 
     private function calculateHash(index:Vector.<int>):uint {
+        /*
         var hash:uint = 1;
 
         var count:int = index.length;
@@ -406,6 +462,23 @@ public class SpatialSet extends AbstractSet {
             hash = 31 * hash + index[i];
 
         return HashMap.hash(hash);
+        */
+        var hash:uint = 0;
+
+        var count:int = index.length;
+        for(var i:int = 0; i < count; i++)
+            hash = (hash << 4) ^ (hash >> 28) ^ index[i];
+
+        return hash;
+        /*
+        var hash:uint = 0;
+
+        var count:int = index.length;
+        for(var i:int = 0; i < count; i++)
+            hash = ((33 * hash) ^ index[i]);
+
+        return hash;
+        */
     }
 
     private function calculateRange(obj:*, leftRight:Vector.<int>, index:Vector.<int>):void {

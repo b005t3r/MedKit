@@ -58,7 +58,7 @@ public class SpatialSetTest extends SetTest {
         assertTrue(result.contains(rect2));
         assertTrue(result.size() >= 2);
 
-        result = spatialSet.search(overlapping2, true, list);
+        result = spatialSet.search(overlapping2, true, true, list);
 
         assertEquals(result, list);
         assertTrue(result.contains(spatial1));
@@ -68,7 +68,7 @@ public class SpatialSetTest extends SetTest {
 
         list.clear();
 
-        result = spatialSet.search(overlapping2, false, list);
+        result = spatialSet.search(overlapping2, false, true, list);
 
         assertEquals(result, list);
         assertTrue(result.contains(spatial1));
@@ -81,7 +81,7 @@ public class SpatialSetTest extends SetTest {
         assertEquals(result.size(), 0);
 
         list.clear();
-        result = spatialSet.search(notOverlapping2, false, list);
+        result = spatialSet.search(notOverlapping2, false, true, list);
 
         assertEquals(result, list);
         assertEquals(result.size(), 0);

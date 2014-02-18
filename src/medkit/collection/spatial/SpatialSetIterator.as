@@ -4,7 +4,6 @@
  * Time: 8:47
  */
 package medkit.collection.spatial {
-import medkit.collection.Collection;
 import medkit.collection.HashSet;
 import medkit.collection.error.ConcurrentModificationError;
 import medkit.collection.iterator.Iterator;
@@ -25,17 +24,18 @@ public class SpatialSetIterator implements Iterator {
 
         var bucketCount:int = spatialSet._bucketContents.length;
         for(var i:int = 0; i < bucketCount; i++) {
-            var bucket:Collection = spatialSet._bucketContents[i];
+            var bucket:Vector.<BucketData> = spatialSet._bucketContents[i];
 
             if(bucket == null)
                 continue;
 
-            var it:Iterator = bucket.iterator();
-            while(it.hasNext()) {
-                var data:BucketData = it.next();
+            var count:int = bucket.length;
+            for(var j:int = 0; j < count; j++) {
+                var data:BucketData = bucket[j];
 
                 _tempSet.add(data);
             }
+
         }
 
         _tempSetIt = _tempSet.iterator();
