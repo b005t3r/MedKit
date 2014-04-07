@@ -5,6 +5,8 @@
  */
 
 package medkit.object {
+import flash.system.ApplicationDomain;
+
 import medkit.collection.ArrayUtil;
 import medkit.object.error.CloneNotRegisteredError;
 
@@ -296,8 +298,23 @@ public class ObjectUtil {
 
         return clazz;
     }
-}
 
+    public static function getFullClassName(className):String {
+        var classNames:Vector.<String> = ApplicationDomain.currentDomain.getQualifiedDefinitionNames();
+
+        var count:int = classNames.length;
+        for(var i:int = 0; i < count; i++) {
+            var fullClassName:String = classNames[i];
+
+            var index:int = fullClassName.indexOf(className);
+
+            if(index >= 0)
+                return fullClassName;
+        }
+
+        return null;
+    }
+}
 }
 
 internal class FakeClass {}
