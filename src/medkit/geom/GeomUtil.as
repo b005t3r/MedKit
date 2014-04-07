@@ -8,6 +8,13 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 
 public class GeomUtil {
+    public static function distanceBetweenPoints(a:Point, b:Point):Number {
+        var dy:Number = b.y - a.y;
+        var dx:Number = b.x - a.x;
+
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
     public static function angleBetweenPoints(a:Point, b:Point):Number {
         var dy:Number = b.y - a.y;
         var dx:Number = b.x - a.x;
@@ -53,7 +60,7 @@ public class GeomUtil {
     }
 
     public static function circlesIntersection(firstCircle:Point, firstRadius:Number, secondCircle:Point, secondRadius:Number):Vector.<Point> {
-        var distance:Number = Point.distance(firstCircle, secondCircle);
+        var distance:Number = distanceBetweenPoints(firstCircle, secondCircle);
 
         // no intersection
         if(distance > firstRadius + secondRadius
