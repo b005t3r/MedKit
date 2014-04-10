@@ -306,7 +306,7 @@ public class ObjectUtil {
         for(var i:int = 0; i < count; i++) {
             var fullClassName:String = classNames[i];
 
-            var index:int = fullClassName.indexOf(className);
+            var index:int = fullClassName.lastIndexOf(className);
 
             if(index >= 0 && index + className.length == fullClassName.length)
                 return fullClassName;
