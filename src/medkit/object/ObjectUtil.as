@@ -308,7 +308,7 @@ public class ObjectUtil {
 
             var index:int = fullClassName.indexOf(className);
 
-            if(index >= 0)
+            if(index >= 0 && index + className.length == fullClassName.length)
                 return fullClassName;
         }
 
