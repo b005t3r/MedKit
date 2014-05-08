@@ -15,7 +15,7 @@ public class TreeMapDescendingSubMap extends TreeMapNavigableSubMap {
     public function TreeMapDescendingSubMap(m:TreeMap, fromStart:Boolean, lo:*, loInclusive:Boolean, toEnd:Boolean, hi:*, hiInclusive:Boolean) {
         super(m, fromStart, lo, loInclusive, toEnd, hi, hiInclusive);
 
-        _reverseComparator = Collections.reverseOrder(m.comparator());
+        _reverseComparator = CollectionUtil.reverseOrder(m.comparator());
     }
 
     override public function comparator():Comparator {

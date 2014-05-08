@@ -6,7 +6,7 @@
 
 package medkit.collection.test.base {
 
-import medkit.collection.Collections;
+import medkit.collection.CollectionUtil;
 import medkit.collection.SortedSet;
 import medkit.collection.TestSubject;
 import medkit.collection.TestSubjectComparator;
@@ -53,7 +53,7 @@ public class SortedSetTest extends SetTest {
         assertTrue(cmp.compare(e3, e1) > 0);
         assertTrue(cmp.compare(e3, e2) > 0);
 
-        var revCmp:Comparator = Collections.reverseOrder(cmp);
+        var revCmp:Comparator = CollectionUtil.reverseOrder(cmp);
         var revNewSortedSet:SortedSet = createSortedSet(revCmp);
 
         assertTrue(revNewSortedSet.comparator() === revCmp);

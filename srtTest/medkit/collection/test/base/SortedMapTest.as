@@ -6,7 +6,7 @@
 
 package medkit.collection.test.base {
 
-import medkit.collection.Collections;
+import medkit.collection.CollectionUtil;
 import medkit.collection.MapEntry;
 import medkit.collection.SortedMap;
 import medkit.collection.TestSubject;
@@ -208,7 +208,7 @@ public class SortedMapTest extends MapTest {
         assertTrue(cmp.compare(e3.getKey(), e1.getKey()) > 0);
         assertTrue(cmp.compare(e3.getKey(), e2.getKey()) > 0);
 
-        var revCmp:Comparator = Collections.reverseOrder(cmp);
+        var revCmp:Comparator = CollectionUtil.reverseOrder(cmp);
         var revNewSortedMap:SortedMap = createSortedMap(revCmp);
 
         assertTrue(revNewSortedMap.comparator() === revCmp);
