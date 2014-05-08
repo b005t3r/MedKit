@@ -34,6 +34,23 @@ public class ArrayUtil {
                 dest[j + destPos] = src[j + srcPos];
         }
     }
-}
 
+    public static function indexOfValueOfClass(array:Array, clazz:Class):int {
+        var count:int = array.length;
+        for(var i:int = 0; i < count; i++)
+            if(array[i] is clazz)
+                return i;
+
+        return -1;
+    }
+
+    public static function indexOfValueMatchingCriteria(array:Array, matchCriteria:Function):int {
+        var count:int = array.length;
+        for(var i:int = 0; i < count; i++)
+            if(matchCriteria(array[i]))
+                return i;
+
+        return -1;
+    }
+}
 }
