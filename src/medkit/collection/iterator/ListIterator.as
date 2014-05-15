@@ -22,16 +22,16 @@ public interface ListIterator extends Iterator {
     function previous():*;
 
     /**
-     * Returns the index of the element that would be returned by a subsequent call to previous. (Returns list size if the list iterator is at the end of the list.)
+     * Returns the index of the element that would be returned by a subsequent call to next(). (Returns list size if the list iterator is at the end of the list.)
      *
-     * @returns index of the element that would be returned by a subsequent call to previous. (Returns list size if the list iterator is at the end of the list.)
+     * @returns index of the element that would be returned by a subsequent call to next(). (Returns list size if the list iterator is at the end of the list.)
      */
     function nextIndex():int;
 
     /**
-     * Returns the index of the element that would be returned by a subsequent call to next. (Returns -1 if the list iterator is at the beginning of the list.)
+     * Returns the index of the element that would be returned by a subsequent call to previous(). (Returns -1 if the list iterator is at the beginning of the list.)
      *
-     * @returns index of the element that would be returned by a subsequent call to previous. (Returns -1 if the list iterator is at the beginning of the list.)
+     * @returns index of the element that would be returned by a subsequent call to previous(). (Returns -1 if the list iterator is at the beginning of the list.)
      */
     function previousIndex():int;
 
