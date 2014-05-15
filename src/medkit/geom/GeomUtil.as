@@ -4,6 +4,7 @@
  * Time: 8:54
  */
 package medkit.geom {
+import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
@@ -96,10 +97,11 @@ public class GeomUtil {
     }
 
     public static function rectangleIntersection(rect:Rectangle, otherRect:Rectangle, resultRect:Rectangle = null):Rectangle {
-        var x1:Number = Math.max(rect.left, otherRect.left),
-            y1:Number = Math.max(rect.top, otherRect.top),
-            x2:Number = Math.min(rect.right, otherRect.right),
-            y2:Number = Math.min(rect.bottom, otherRect.bottom);
+        var x1:Number = rect.left > otherRect.left ? rect.left : otherRect.left,
+            y1:Number = rect.top > otherRect.top ? rect.top : otherRect.top,
+            x2:Number = rect.right < otherRect.right ? rect.right : otherRect.right,
+            y2:Number = rect.bottom < otherRect.bottom ? rect.bottom : otherRect.bottom
+        ;
 
         var width:Number = x2 - x1;
 
@@ -206,5 +208,15 @@ public class GeomUtil {
 
         return resultRects;
     }
+
+    public static function transformPoint2D(matrix:Matrix, x:Number, y:Number, resultPoint:Point2D = null):Point2D {
+        if(resultPoint == null) resultPoint = new Point2D();
+
+        resultPoint.x = matrix.a * x + matrix.c * y + matrix.tx;
+        resultPoint.y = matrix.d * y + matrix.b * x + matrix.ty;
+
+        return resultPoint;
+    }
+
 }
 }
