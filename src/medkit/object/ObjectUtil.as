@@ -5,6 +5,8 @@
  */
 
 package medkit.object {
+import flash.geom.Point;
+import flash.geom.Rectangle;
 import flash.system.ApplicationDomain;
 
 import medkit.collection.ArrayUtil;
@@ -18,7 +20,7 @@ public class ObjectUtil {
 
             return e1.equals(e2);
         }
-        else if(o1 as Array && o2 as Array) {
+        else if(o1 is Array && o2 is Array) {
             var a1:Array = o1 as Array;
             var a2:Array = o2 as Array;
 
@@ -33,7 +35,7 @@ public class ObjectUtil {
                 return true;
             }
         }
-        else if(o1 as Vector && o2 as Vector) {
+        else if(o1 is Vector && o2 is Vector) {
             var v1:Vector = o1 as Vector;
             var v2:Vector = o2 as Vector;
 
@@ -48,10 +50,19 @@ public class ObjectUtil {
                 return true;
             }
         }
-        /*
-        else {
-            return o1 == o2;
-        }*/
+        else if(o1 is Point && o2 is Point) {
+            var p1:Point = o1 as Point;
+            var p2:Point = o2 as Point;
+
+            return p1.equals(p2);
+        }
+        else if(o1 is Rectangle && o2 is Rectangle) {
+            var r1:Rectangle = o1 as Rectangle;
+            var r2:Rectangle = o2 as Rectangle;
+
+            return r1.equals(r2);
+        }
+        // node: typeof() works only for predefined types, so all object subtypes are compared against other object subtypes
         else if(typeof(o1) == typeof(o2)) {
             return o1 == o2;
         }
@@ -187,6 +198,11 @@ public class ObjectUtil {
             var array:Array = o as Array;
 
             return cloneArray(array, context);
+        }
+        else if(o is Point) {
+            var point:Point = o as Point;
+
+            return point.clone();
         }
         else if(o is Cloneable) {
             var cloneable:Cloneable = o as Cloneable;
