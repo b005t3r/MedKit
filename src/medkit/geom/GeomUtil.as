@@ -8,6 +8,8 @@ import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
+import medkit.geom.shapes.Point2D;
+
 public class GeomUtil {
     public static function distanceBetweenPoints(a:Point, b:Point):Number {
         var dy:Number = b.y - a.y;
