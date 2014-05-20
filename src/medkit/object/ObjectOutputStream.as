@@ -73,12 +73,9 @@ public class ObjectOutputStream {
                     var arrElem:*       = arr[i];
                     var arrKey:String   = String(i);
 
-                    if(typeof(arrElem) != "object") {
-                        _context.members[arrKey] = arrElem;
-                        continue;
-                    }
-
-                    writeAny(arrElem, arrKey);
+                    if(typeof(arrElem) != "object")                 _context.members[arrKey] = arrElem;
+                    else if(_savedObjectIndexes[arrElem] != null)   _context.members[arrKey] = { objectIndex : _savedObjectIndexes[arrElem] };
+                    else                                            writeAny(arrElem, arrKey);
                 }
             }
             else if(value is Dictionary) {
@@ -90,12 +87,9 @@ public class ObjectOutputStream {
 
                     var dictElem:* = dict[dictKey];
 
-                    if(typeof(dictElem) != "object") {
-                        _context.members[dictKey] = dictElem;
-                        continue;
-                    }
-
-                    writeAny(dictElem, dictKey as String);
+                    if(typeof(dictElem) != "object")                _context.members[dictKey] = dictElem;
+                    else if(_savedObjectIndexes[dictElem] != null)  _context.members[dictKey] = { objectIndex : _savedObjectIndexes[dictElem] };
+                    else                                            writeAny(dictElem, dictKey as String);
                 }
             }
             else if(ObjectUtil.getClass(value) == obj) {
@@ -104,12 +98,9 @@ public class ObjectOutputStream {
                 for(var oKey:String in o) {
                     var oElem:* = o[oKey];
 
-                    if(typeof(oElem) != "object") {
-                        _context.members[oKey] = oElem;
-                        continue;
-                    }
-
-                    writeAny(oElem, oKey);
+                    if(typeof(oElem) != "object")               _context.members[oKey] = oElem;
+                    else if(_savedObjectIndexes[oElem] != null) _context.members[oKey] = { objectIndex : _savedObjectIndexes[oElem] };
+                    else                                        writeAny(oElem, oKey);
                 }
             }
             else if(value is Serializable) {

@@ -91,12 +91,11 @@ public class ObjectInputStream {
         var oldContext:Object = _context;
 
         _context                = _jsonData.serializedObjects[index];
-        var className:String    = ObjectUtil.getFullClassName(_context.className);
-        var clazz:Class         = getDefinitionByName(className) as Class;
+        var clazz:Class         = getDefinitionByName(_context.className) as Class;
         var tmpInstance:*       = new clazz();
         var retVal:Object;
 
-        if(tmpInstance is Array) {
+        if(clazz == Array) {
             var arr:Array = [];
 
             for (var arrKey:String in _context.members) {
@@ -115,7 +114,7 @@ public class ObjectInputStream {
                     continue;
                 }
 
-                var arrElemIndex:int = obj.objectIndex;
+                var arrElemIndex:int = arrElem.objectIndex;
                 arrElem = _loadedObjectsByIndex[arrElemIndex];
 
                 if(arrElem != null) {
@@ -131,7 +130,7 @@ public class ObjectInputStream {
 
             retVal = arr;
         }
-        else if(tmpInstance is Dictionary || clazz == Object) {
+        else if(clazz == Dictionary || clazz == Object) {
             var dict:Dictionary = new Dictionary();
 
             for (var dictKey:String in _context.members) {
@@ -159,14 +158,14 @@ public class ObjectInputStream {
             retVal = dict;
         }
         else if(tmpInstance is Serializable) {
-            var serializable:Serializable = new clazz();
+            var serializable:Serializable = tmpInstance as Serializable;
             _loadedObjectsByIndex[index] = serializable;
             serializable.readObject(this);
 
             retVal = serializable;
         }
         else {
-            throw new TypeError("class '" + className + "' for key '" + key + "' does not implement 'Serializable' (how is that even possible?)");
+            throw new TypeError("class '" + clazz + "' for key '" + key + "' does not implement 'Serializable' (how is that even possible?)");
         }
 
         _context = oldContext;

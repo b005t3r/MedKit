@@ -180,5 +180,34 @@ public class SerializableTest {
 
         assertTrue(b == z);
     }
+
+    [Test]
+    public function testSerializeArray():void {
+        var a:Array = [ new SimpleSerializable("simple", 5), 7, "a dziad wiedzial", null, "nie powiedzial", 123.321 ];
+
+        output.writeObject(a, "a");
+
+        assertFalse(a == output.jsonData.globalKeys["a"]);
+        assertEquals(2, output.jsonData.serializedObjects.length);
+
+        var v:Object = input.readObject("a");
+
+        assertFalse(a == v);
+        assertTrue(ObjectUtil.equals(a, v));
+
+        var s:SimpleSerializable = new SimpleSerializable("another simple", 7);
+        var b:Array = [s, s, s];
+
+        output.writeObject(b, "b");
+
+        assertFalse(b == output.jsonData.globalKeys["b"]);
+        assertEquals(4, output.jsonData.serializedObjects.length);
+
+        var z:Object = input.readObject("b");
+
+        assertFalse(b == z);
+        assertTrue(ObjectUtil.equals(b, z));
+        assertTrue(z[0] != s && z[0] == z[1] && z[1] == z[2]);
+    }
 }
 }
