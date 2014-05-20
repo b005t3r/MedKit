@@ -1,0 +1,177 @@
+/**
+ * User: booster
+ * Date: 19/05/14
+ * Time: 9:44
+ */
+package medkit.object {
+import flash.utils.Dictionary;
+import flash.utils.getDefinitionByName;
+
+public class ObjectInputStream {
+    private var _jsonData:Object;
+    private var _loadedObjectsByIndex:Dictionary    = new Dictionary();
+    private var _context:Object                     = null;
+
+    public function ObjectInputStream(jsonData:Object) {
+        _jsonData = jsonData;
+    }
+
+    public function readBoolean(key:String):Boolean {
+        var retVal:* = readAny(key);
+
+        if(retVal is Boolean == false)
+            throw new TypeError("value for key '" + key + "' is not a Boolean");
+
+        return retVal;
+    }
+
+    public function readInt(key:String):int {
+        var retVal:* = readAny(key);
+
+        if(retVal is int == false)
+            throw new TypeError("value for key '" + key + "' is not an int");
+
+        return retVal;
+    }
+
+    public function readUnsignedInt(key:String):uint {
+        var retVal:* = readAny(key);
+
+        if(retVal is uint == false)
+            throw new TypeError("value for key '" + key + "' is not an uint");
+
+        return retVal;
+    }
+
+    public function readNumber(key:String):Number {
+        var retVal:* = readAny(key);
+
+        if(retVal is Number == false)
+            throw new TypeError("value for key '" + key + "' is not a Number");
+
+        return retVal;
+    }
+
+    public function readString(key:String):String {
+        var retVal:* = readAny(key);
+
+        if(retVal is String == false)
+            throw new TypeError("value for key '" + key + "' is not a String");
+
+        return retVal;
+    }
+
+    public function readObject(key:String):* {
+        var retVal:Object = readAny(key);
+
+        if(retVal != null && retVal is Object == false)
+            throw new TypeError("value for key '" + key + "' is not an Object");
+
+        return retVal;
+    }
+
+    protected function readAny(key:String):* {
+        var obj:* = _context == null ? _jsonData.globalKeys[key] : _context.members[key];
+
+        if(obj == null)
+            throw new ArgumentError("object for key '" + key + "' does not exist");
+
+        if(typeof(obj) != "object")
+            return obj;
+
+        if(ObjectUtil.getClass(obj) == Object && obj.hasOwnProperty("thisIsANullObject"))
+            return null;
+
+        var index:int = obj.objectIndex;
+        obj = _loadedObjectsByIndex[index];
+
+        if(obj != null)
+            return obj;
+
+        var oldContext:Object = _context;
+
+        _context                = _jsonData.serializedObjects[index];
+        var className:String    = ObjectUtil.getFullClassName(_context.className);
+        var clazz:Class         = getDefinitionByName(className) as Class;
+        var tmpInstance:*       = new clazz();
+        var retVal:Object;
+
+        if(tmpInstance is Array) {
+            var arr:Array = [];
+
+            for (var arrKey:String in _context.members) {
+                if(isNaN(Number(arrKey)))
+                    throw new Error("serialized Array member's key can not be converted to an index: " + arrKey);
+
+                var arrIndex:int = int(arrKey);
+
+                if(arr.length <= arrIndex)
+                    arr.length = arrIndex + 1;
+
+                var arrElem:* = _context.members[arrKey];
+
+                if(typeof(arrElem) != "object") {
+                    arr[arrIndex] = arrElem;
+                    continue;
+                }
+
+                var arrElemIndex:int = obj.objectIndex;
+                arrElem = _loadedObjectsByIndex[arrElemIndex];
+
+                if(arrElem != null) {
+                    arr[arrIndex] = arrElem;
+                    continue;
+                }
+
+                arrElem = readAny(arrKey);
+
+                _loadedObjectsByIndex[arrElemIndex] = arrElem;
+                arr[arrIndex] = arrElem;
+            }
+
+            retVal = arr;
+        }
+        else if(tmpInstance is Dictionary || clazz == Object) {
+            var dict:Dictionary = new Dictionary();
+
+            for (var dictKey:String in _context.members) {
+                var dictElem:* = _context.members[dictKey];
+
+                if(typeof(dictElem) != "object") {
+                    dict[dictKey] = dictElem;
+                    continue;
+                }
+
+                var dictElemIndex:int = obj.objectIndex;
+                dictElem = _loadedObjectsByIndex[dictElemIndex];
+
+                if(dictElem != null) {
+                    dict[dictKey] = dictElem;
+                    continue;
+                }
+
+                dictElem = readAny(dictKey);
+
+                _loadedObjectsByIndex[dictElemIndex] = dictElem;
+                dict[dictKey] = dictElem;
+            }
+
+            retVal = dict;
+        }
+        else if(tmpInstance is Serializable) {
+            var serializable:Serializable = new clazz();
+            _loadedObjectsByIndex[index] = serializable;
+            serializable.readObject(this);
+
+            retVal = serializable;
+        }
+        else {
+            throw new TypeError("class '" + className + "' for key '" + key + "' does not implement 'Serializable' (how is that even possible?)");
+        }
+
+        _context = oldContext;
+
+        return retVal;
+    }
+}
+}
