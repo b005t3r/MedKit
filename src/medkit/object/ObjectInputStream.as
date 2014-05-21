@@ -61,7 +61,7 @@ public class ObjectInputStream {
         return retVal;
     }
 
-    public function readObject(key:String):* {
+    public function readObject(key:String):Object {
         var retVal:Object = readAny(key);
 
         if(retVal != null && retVal is Object == false)
@@ -97,6 +97,7 @@ public class ObjectInputStream {
 
         if(clazz == Array) {
             var arr:Array = [];
+            _loadedObjectsByIndex[index] = arr;
 
             for (var arrKey:String in _context.members) {
                 if(isNaN(Number(arrKey)))
@@ -132,6 +133,7 @@ public class ObjectInputStream {
         }
         else if(clazz == Dictionary || clazz == Object) {
             var dict:Dictionary = new Dictionary();
+            _loadedObjectsByIndex[index] = dict;
 
             for (var dictKey:String in _context.members) {
                 var dictElem:* = _context.members[dictKey];
@@ -141,7 +143,7 @@ public class ObjectInputStream {
                     continue;
                 }
 
-                var dictElemIndex:int = obj.objectIndex;
+                var dictElemIndex:int = dictElem.objectIndex;
                 dictElem = _loadedObjectsByIndex[dictElemIndex];
 
                 if(dictElem != null) {

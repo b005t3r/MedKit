@@ -4,18 +4,17 @@
  * Time: 14:31
  */
 package medkit.object {
+import flash.utils.Dictionary;
+
 import medkit.object.test.SimpleSerializable;
 
 import org.flexunit.asserts.assertEquals;
 import org.flexunit.asserts.assertFalse;
 import org.flexunit.asserts.assertTrue;
 
-public class SerializableTest {
+public class SimpleSerializableTest {
     private var input:ObjectInputStream;
     private var output:ObjectOutputStream;
-
-    public function SerializableTest() {
-    }
 
     [Before]
     public function setUp():void {
@@ -208,6 +207,40 @@ public class SerializableTest {
         assertFalse(b == z);
         assertTrue(ObjectUtil.equals(b, z));
         assertTrue(z[0] != s && z[0] == z[1] && z[1] == z[2]);
+    }
+
+    [Test]
+    public function testDictionaryArray():void {
+        var a:Dictionary = new Dictionary();
+        a["a to bylo"] = new SimpleSerializable("simple", 5);
+        a["tak"] = 4;
+
+        output.writeObject(a, "a");
+
+        assertFalse(a == output.jsonData.globalKeys["a"]);
+        assertEquals(2, output.jsonData.serializedObjects.length);
+
+        var v:Object = input.readObject("a");
+
+        assertFalse(a == v);
+        assertTrue(ObjectUtil.equals(a, v));
+
+        var s:SimpleSerializable = new SimpleSerializable("another simple", 7);
+        var b:Dictionary = new Dictionary();
+        b["a"] = s;
+        b["b"] = s;
+        b["c"] = s;
+
+        output.writeObject(b, "b");
+
+        assertFalse(b == output.jsonData.globalKeys["b"]);
+        assertEquals(4, output.jsonData.serializedObjects.length);
+
+        var z:Object = input.readObject("b");
+
+        assertFalse(b == z);
+        assertTrue(ObjectUtil.equals(b, z));
+        assertTrue(z["a"] != s && z["a"] == z["b"] && z["b"] == z["c"]);
     }
 }
 }
