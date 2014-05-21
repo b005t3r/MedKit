@@ -8,13 +8,17 @@ package medkit.object {
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.system.ApplicationDomain;
+import flash.utils.Dictionary;
 
 import medkit.collection.ArrayUtil;
 import medkit.object.error.CloneNotRegisteredError;
 
 public class ObjectUtil {
     public static function equals(o1:*, o2:*):Boolean {
-        if(o1 is Equalable && o2 is Equalable) {
+        if(o1 === o2) {
+            return true;
+        }
+        else if(o1 is Equalable && o2 is Equalable) {
             var e1:Equalable = o1 as Equalable;
             var e2:Equalable = o2 as Equalable;
 
@@ -49,6 +53,20 @@ public class ObjectUtil {
 
                 return true;
             }
+        }
+        else if(o1 is Dictionary && o2 is Dictionary) {
+            var d1:Dictionary = o1 as Dictionary;
+            var d2:Dictionary = o2 as Dictionary;
+
+            for(var d1Key:Object in d1)
+                if(! equals(d1[d1Key], d2[d1Key]))
+                    return false;
+
+            for(var d2Key:Object in d2)
+                if(! equals(d1[d2Key], d2[d2Key]))
+                    return false;
+
+            return true;
         }
         else if(o1 is Point && o2 is Point) {
             var p1:Point = o1 as Point;
