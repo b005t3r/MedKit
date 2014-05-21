@@ -4,6 +4,7 @@
  * Time: 9:28
  */
 package medkit.object {
+import flash.filesystem.File;
 import flash.utils.Dictionary;
 
 import medkit.object.test.ComplexSerializable;
@@ -128,8 +129,8 @@ public class ComplexSerializableTest {
         arr[3] = arr;
         arr[4] = dict;
         arr[5] = "siala baba mak";
-        arr[6] = NaN;
-        arr[7] = 12;
+        //arr[6] = NaN; // NaN not supported
+        arr[6] = 12;
 
         dict["a"] = a;
         dict["b"] = b;
@@ -159,6 +160,23 @@ public class ComplexSerializableTest {
 
         // the only way to compare these two
         assertEquals(dictString, loadedDictString);
+
+        var file:File = File.createTempFile();
+
+        output.saveToFile(file);
+
+        var inp:ObjectInputStream = ObjectInputStream.readFromFile(file);
+        var fileLoadedDict:Dictionary = inp.readObject("dict") as Dictionary;
+
+        out = new ObjectOutputStream();
+        out.writeObject(fileLoadedDict, "dict");
+
+        var fileLoadedDictString:String = JSON.stringify(out.jsonData);
+
+        assertEquals(dictString, fileLoadedDictString);
+        assertEquals(loadedDictString, fileLoadedDictString);
+
+        file.deleteFile();
     }
 }
 }

@@ -4,6 +4,9 @@
  * Time: 9:44
  */
 package medkit.object {
+import flash.filesystem.File;
+import flash.filesystem.FileMode;
+import flash.filesystem.FileStream;
 import flash.utils.Dictionary;
 import flash.utils.getDefinitionByName;
 
@@ -11,6 +14,26 @@ public class ObjectInputStream {
     private var _jsonData:Object;
     private var _loadedObjectsByIndex:Dictionary    = new Dictionary();
     private var _context:Object                     = null;
+
+    public static function readFromJSONString(jsonString:String):ObjectInputStream {
+        return new ObjectInputStream(JSON.parse(jsonString));
+    }
+
+    public static function readFromFileStream(stream:FileStream, closeStream:Boolean = true):ObjectInputStream {
+        var retVal:ObjectInputStream = readFromJSONString(stream.readUTF());
+
+        if(closeStream)
+            stream.close();
+
+        return retVal;
+    }
+
+    public static function readFromFile(file:File):ObjectInputStream {
+        var stream:FileStream = new FileStream();
+        stream.open(file, FileMode.READ);
+
+        return readFromFileStream(stream);
+    }
 
     public function ObjectInputStream(jsonData:Object) {
         _jsonData = jsonData;
