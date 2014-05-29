@@ -34,6 +34,13 @@ public class Point2D extends Point implements Hashable, Spatial {
         y = point.y;
     }
 
+    public function project(angle:Number, distance:Number):Point2D {
+        return new Point2D(
+            (x + Math.sin(angle) * distance),
+            (y - Math.cos(angle) * distance)    // minus when Y-Axis is going down, plus when it's going up
+        );
+    }
+
     public function hashCode():int {
         return ((y << 16) | x);
     }
