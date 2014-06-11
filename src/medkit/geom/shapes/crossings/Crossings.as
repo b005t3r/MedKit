@@ -4,8 +4,6 @@
  * Time: 15:51
  */
 package medkit.geom.shapes.crossings {
-import medkit.geom.*;
-import medkit.collection.VectorUtil;
 import medkit.geom.shapes.PathIterator;
 import medkit.geom.shapes.Point2D;
 import medkit.geom.shapes.curve.Curve;

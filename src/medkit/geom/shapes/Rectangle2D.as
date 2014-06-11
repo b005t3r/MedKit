@@ -4,17 +4,26 @@
  * Time: 11:13
  */
 package medkit.geom.shapes {
-import medkit.geom.*;
-
 import flash.geom.Matrix;
 import flash.geom.Rectangle;
 
 import medkit.collection.spatial.Spatial;
-
 import medkit.object.Hashable;
 
 public class Rectangle2D extends Rectangle implements Shape2D, Hashable, Spatial {
-    public static const _tempRect:Rectangle2D = new Rectangle2D();
+    /** The bitmask that indicates that a point lies to the left of this <code>Rectangle2D</code>. */
+    public static const OUT_LEFT:int = 1;
+
+    /** The bitmask that indicates that a point lies above this <code>Rectangle2D</code>. */
+    public static const OUT_TOP:int = 2;
+
+    /** The bitmask that indicates that a point lies to the right of this <code>Rectangle2D</code>. */
+    public static const OUT_RIGHT:int = 4;
+
+    /** The bitmask that indicates that a point lies below this <code>Rectangle2D</code>. */
+    public static const OUT_BOTTOM:int = 8;
+
+    private static const _tempRect:Rectangle2D = new Rectangle2D();
 
     public function Rectangle2D(x:Number = 0, y:Number = 0, width:Number = 0, height:Number = 0) {
         super(x, y, width, height);
@@ -37,6 +46,44 @@ public class Rectangle2D extends Rectangle implements Shape2D, Hashable, Spatial
 
     public function intersectsRectangle2D(rect:Rectangle2D):Boolean {
         return intersects(rect);
+    }
+
+    public function intersectsLine(x1:Number, y1:Number, x2:Number, y2:Number):Boolean {
+        var out1:int, out2:int;
+
+        if((out2 = outCode(x2, y2)) == 0) {
+            return true;
+        }
+
+        while((out1 = outCode(x1, y1)) != 0) {
+            if((out1 & out2) != 0)
+                return false;
+
+            if((out1 & (OUT_LEFT | OUT_RIGHT)) != 0) {
+                var x:Number = this.x;
+
+                if((out1 & OUT_RIGHT) != 0)
+                    x += this.width;
+
+                y1 = y1 + (x - x1) * (y2 - y1) / (x2 - x1);
+                x1 = x;
+            }
+            else {
+                var y:Number = this.y;
+
+                if((out1 & OUT_BOTTOM) != 0)
+                    y += this.height;
+
+                x1 = x1 + (y - y1) * (x2 - x1) / (y2 - y1);
+                y1 = y;
+            }
+        }
+
+        return true;
+    }
+
+    public function intersectsLine2D(line:Line2D):Boolean {
+        return intersectsLine(line.x1, line.y1, line.x2, line.y2);
     }
 
     public function containsPoint2D(point:Point2D):Boolean {
@@ -75,6 +122,20 @@ public class Rectangle2D extends Rectangle implements Shape2D, Hashable, Spatial
     public function get indexCount():int { return 2; }
     public function minValue(index:int):Number { return index == 0 ? x : y; }
     public function maxValue(index:int):Number { return index == 0 ? x + width : y + height; }
+
+    public function outCode(x:Number, y:Number):int {
+        var out:int = 0;
+
+        if (this.width <= 0)                out |= OUT_LEFT | OUT_RIGHT;
+        else if (x < this.x)                out |= OUT_LEFT;
+        else if (x > this.x + this.width)   out |= OUT_RIGHT;
+
+        if (this.height <= 0)               out |= OUT_TOP | OUT_BOTTOM;
+        else if (y < this.y)                out |= OUT_TOP;
+        else if (y > this.y + this.height)  out |= OUT_BOTTOM;
+
+        return out;
+    }
 }
 }
 

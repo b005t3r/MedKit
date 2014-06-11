@@ -4,11 +4,7 @@
  * Time: 9:56
  */
 package medkit.geom.shapes {
-import medkit.geom.*;
-
 import flash.geom.Matrix;
-
-import medkit.geom.shapes.QuadCurve2D;
 
 public class QuadCurve2D implements Shape2D {
     private static const BELOW:int      = -2;

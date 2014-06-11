@@ -4,7 +4,6 @@
  * Time: 16:07
  */
 package medkit.geom.shapes.curve {
-import medkit.geom.*;
 import medkit.geom.shapes.PathIterator;
 import medkit.geom.shapes.Point2D;
 import medkit.geom.shapes.Rectangle2D;

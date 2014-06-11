@@ -4,8 +4,6 @@
  * Time: 13:53
  */
 package medkit.geom.shapes {
-import medkit.geom.*;
-
 import flash.geom.Matrix;
 
 import medkit.collection.spatial.Spatial;
@@ -27,6 +25,9 @@ public class Polygon2D implements Shape2D, Equalable, Hashable, Spatial {
     public function Polygon2D() {
         _points.length = MIN_LENGTH;
     }
+
+    public function get pointCount():int { return _pointCount; }
+    public function getPoint2D(index:int):Point2D { return _points[index]; }
 
     public function reset():void {
         for(var i:int = 0; i < _pointCount; ++i)
@@ -293,7 +294,6 @@ public class Polygon2D implements Shape2D, Equalable, Hashable, Spatial {
 import flash.geom.Matrix;
 
 import medkit.geom.GeomUtil;
-
 import medkit.geom.shapes.PathIterator;
 import medkit.geom.shapes.Point2D;
 import medkit.geom.shapes.Polygon2D;

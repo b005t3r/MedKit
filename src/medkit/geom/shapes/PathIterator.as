@@ -4,7 +4,6 @@
  * Time: 11:34
  */
 package medkit.geom.shapes {
-import medkit.geom.*;
 import medkit.geom.shapes.enum.SegmentType;
 import medkit.geom.shapes.enum.WindingRule;
 

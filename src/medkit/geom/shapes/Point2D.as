@@ -7,7 +7,6 @@ package medkit.geom.shapes {
 import flash.geom.Point;
 
 import medkit.collection.spatial.Spatial;
-
 import medkit.object.Hashable;
 
 public class Point2D extends Point implements Hashable, Spatial {
