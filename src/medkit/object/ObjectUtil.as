@@ -222,6 +222,11 @@ public class ObjectUtil {
 
             return point.clone();
         }
+        else if(o is Rectangle) {
+            var rect:Rectangle = o as Rectangle;
+
+            return rect.clone();
+        }
         else if(o is Cloneable) {
             var cloneable:Cloneable = o as Cloneable;
 
