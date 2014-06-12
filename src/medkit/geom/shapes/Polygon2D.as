@@ -9,14 +9,16 @@ import flash.geom.Matrix;
 import medkit.collection.spatial.Spatial;
 import medkit.geom.shapes.crossings.Crossings;
 import medkit.geom.shapes.crossings.EvenOdd;
+import medkit.object.Cloneable;
+import medkit.object.CloningContext;
 import medkit.object.Equalable;
 import medkit.object.Hashable;
 import medkit.object.ObjectUtil;
 
-public class Polygon2D implements Shape2D, Equalable, Hashable, Spatial {
+public class Polygon2D implements Shape2D, Equalable, Hashable, Cloneable, Spatial {
     private static const MIN_LENGTH:int = 4;
 
-    private var _points:Vector.<Point2D>    = new <Point2D>[];
+    private var _points:Array               = [];
     private var _pointCount:int             = 0;
 
     private var _bounds:Rectangle2D         = new Rectangle2D();
@@ -328,12 +330,12 @@ import medkit.geom.shapes.enum.WindingRule;
 
 class PolyIterator implements PathIterator {
     public var poly:Polygon2D;
-    public var points:Vector.<Point2D>;
+    public var points:Array;
     public var pointCount:int;
     public var matrix:Matrix;
     public var index:int;
 
-    public function PolyIterator(poly:Polygon2D, points:Vector.<Point2D>, pointCount:int, matrix:Matrix = null) {
+    public function PolyIterator(poly:Polygon2D, points:Array, pointCount:int, matrix:Matrix = null) {
         this.poly       = poly;
         this.matrix     = matrix;
         this.index      = pointCount > 0 ? 0 : 1;
