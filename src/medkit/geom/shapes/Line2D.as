@@ -242,7 +242,7 @@ public class Line2D implements Spatial, Shape2D, Equalable, Hashable {
     public var x2:Number;
     public var y2:Number;
 
-    public function Line2D(x1:Number, y1:Number, x2:Number, y2:Number) {
+    public function Line2D(x1:Number = 0, y1:Number = 0, x2:Number = 0, y2:Number = 0) {
         setTo(x1, y1, x2, y2);
     }
 
@@ -251,6 +251,22 @@ public class Line2D implements Spatial, Shape2D, Equalable, Hashable {
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
+    }
+
+    public function get angle():Number {
+        var dy:Number = y2 - y1;
+        var dx:Number = x2 - x1;
+
+        // -dy because y-axis goes points down
+        return (Math.atan2(dx, -dy) + 2 * Math.PI) % (2 * Math.PI);
+    }
+
+    public function get reversedAngle():Number {
+        var dy:Number = y1 - y2;
+        var dx:Number = x1 - x2;
+
+        // -dy because y-axis goes points down
+        return (Math.atan2(dx, -dy) + 2 * Math.PI) % (2 * Math.PI);
     }
 
     public function get indexCount():int { return 2; }
@@ -309,7 +325,7 @@ public class Line2D implements Spatial, Shape2D, Equalable, Hashable {
 
         return (line.x1 == x1 && line.x2 == x2 && line.y1 == y1 && line.y2 == y2)
             || (line.x2 == x1 && line.x1 == x2 && line.y2 == y1 && line.y1 == y2)
-            ;
+        ;
     }
 
     public function hashCode():int {
