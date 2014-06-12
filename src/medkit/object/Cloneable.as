@@ -32,7 +32,7 @@ public interface Cloneable {
      *             return clone;
      *
      *         clone = cloningContext.registerClone(this, new Cloneable());
-     *         clone.myMember = Objects.clone(this.myMember, cloningContext);
+     *         clone.myMember = ObjectUtil.clone(this.myMember, cloningContext);
      *     }
      *     else {
      *         clone = new Cloneable();
@@ -42,7 +42,7 @@ public interface Cloneable {
      *     return clone;
      * </code>
      *
-     * You should always use <code>Objects.clone()</code> method for cloning members or objects of that you don't know
+     * You should always use <code>ObjectUtil.clone()</code> method for cloning members or objects of that you don't know
      * if they implement Cloneable interface.
      *
      * @see ObjectUtil.clone
