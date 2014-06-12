@@ -162,16 +162,16 @@ class RectIterator implements PathIterator {
     public function getWindingRule():WindingRule { return WindingRule.NonZero; }
 
     public function isDone():Boolean {
-        return index > 5;
+        return index > 4;
     }
 
     public function next():void { ++index; }
 
     public function currentSegment(coords:Vector.<Point2D>):SegmentType {
-        if (index > 5)
+        if (index > 4)
             throw new RangeError("rect iterator out of bounds");
 
-        if (index == 5)
+        if (index == 4)
             return SegmentType.Close;
 
         coords[0].x = rect.x;
