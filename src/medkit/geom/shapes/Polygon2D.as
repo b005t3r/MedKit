@@ -223,6 +223,32 @@ public class Polygon2D implements Shape2D, Equalable, Hashable, Spatial {
 
     public function hashCode():int { return _bounds.hashCode(); }
 
+    public function clone(cloningContext:CloningContext = null):Cloneable {
+        var clone:Polygon2D;
+
+        if(cloningContext != null) {
+            clone = cloningContext.fetchClone(this);
+
+            if(clone != null)
+                return clone;
+
+            clone                   = cloningContext.registerClone(this, new Polygon2D());
+            clone._points           = ObjectUtil.clone(this._points, cloningContext);
+            clone._pointCount       = this._pointCount;
+            clone._bounds           = ObjectUtil.clone(this._bounds, cloningContext);
+            clone._boundsInvalid    = this._boundsInvalid;
+        }
+        else {
+            clone                   = new Polygon2D();
+            clone._points           = this._points;
+            clone._pointCount       = this._pointCount;
+            clone._bounds           = this._bounds;
+            clone._boundsInvalid    = this._boundsInvalid;
+        }
+
+        return clone;
+    }
+
     public function get indexCount():int { return _bounds.indexCount; }
     public function minValue(index:int):Number { return _bounds.minValue(index); }
     public function maxValue(index:int):Number { return _bounds.maxValue(index); }
