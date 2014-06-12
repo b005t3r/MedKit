@@ -22,6 +22,7 @@ public class CollectionUtil {
         return new ReverseComparator2(cmp);
     }
 
+    // TODO: change this to something faster
     public static function sort(list:List, cmp:Comparator = null):void {
         var a:Array = list.toArray();
 
