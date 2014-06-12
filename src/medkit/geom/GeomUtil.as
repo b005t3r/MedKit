@@ -11,25 +11,46 @@ import flash.geom.Rectangle;
 import medkit.geom.shapes.Point2D;
 
 public class GeomUtil {
-    public static function distanceBetweenPoints(a:Point, b:Point):Number {
-        var dy:Number = b.y - a.y;
-        var dx:Number = b.x - a.x;
+    public static function distanceBetweenPoints(x1:Number, y1:Number, x2:Number, y2:Number):Number {
+        var dy:Number = y2 - y1;
+        var dx:Number = x2 - x1;
 
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    public static function angleBetweenPoints(a:Point, b:Point):Number {
-        var dy:Number = b.y - a.y;
-        var dx:Number = b.x - a.x;
+    public static function angleBetweenPoints(x1:Number, y1:Number, x2:Number, y2:Number):Number {
+        var dy:Number = y2 - y1;
+        var dx:Number = x2 - x1;
 
         return (Math.atan2(dx, -dy) + 2 * Math.PI) % (2 * Math.PI);
     }
 
-    public static function projectPoint(source:Point, angle:Number, distance:Number):Point {
-        return new Point(
-            (source.x + Math.sin(angle) * distance),
-            (source.y - Math.cos(angle) * distance)    // minus when Y-Axis is going down, plus when it's going up
+    public static function normalizeGlobalAngle(angle:Number):Number {
+        angle = angle % (2 * Math.PI);
+
+        return angle >= 0 ? angle : angle + 2 * Math.PI;
+    }
+
+    public static function normalizeLocalAngle(angle:Number):Number {
+        angle = angle % (2 * Math.PI);
+
+        return angle > Math.PI
+            ? angle - Math.PI
+            : angle < -Math.PI
+                ? angle + Math.PI
+                : angle
+            ;
+    }
+
+    public static function projectPoint(x:Number, y:Number, angle:Number, distance:Number, result:Point2D = null):Point2D {
+        if(result == null) result = new Point2D();
+
+        result.setTo(
+            (x + Math.sin(angle) * distance),
+            (y - Math.cos(angle) * distance)    // minus when Y-Axis is going down, plus when it's going up
         );
+
+        return result;
     }
 
     public static function linesIntersection(firstLine:Vector.<Point>, secondLine:Vector.<Point>, intersectionPoint:Point = null):Boolean {
@@ -63,7 +84,7 @@ public class GeomUtil {
     }
 
     public static function circlesIntersection(firstCircle:Point, firstRadius:Number, secondCircle:Point, secondRadius:Number):Vector.<Point> {
-        var distance:Number = distanceBetweenPoints(firstCircle, secondCircle);
+        var distance:Number = distanceBetweenPoints(firstCircle.x, firstCircle.y, secondCircle.x, secondCircle.y);
 
         // no intersection
         if(distance > firstRadius + secondRadius
@@ -73,16 +94,16 @@ public class GeomUtil {
 
         // single intersection point
         if(distance == firstRadius + secondRadius) {
-            var angle:Number = angleBetweenPoints(firstCircle, secondCircle);
-            var point:Point = projectPoint(firstCircle, angle, firstRadius);
+            var angle:Number = angleBetweenPoints(firstCircle.x, firstCircle.y, secondCircle.x, secondCircle.y);
+            var point:Point = projectPoint(firstCircle.x, firstCircle.y, angle, firstRadius);
 
             return new <Point>[point];
         }
 
         // two intersection points
-        var ang:Number = angleBetweenPoints(firstCircle, secondCircle);
+        var ang:Number = angleBetweenPoints(firstCircle.x, firstCircle.y, secondCircle.x, secondCircle.y);
         var a:Number = (firstRadius * firstRadius - secondRadius * secondRadius + distance * distance) / (2 * distance);
-        var p:Point = projectPoint(firstCircle, ang, a);
+        var p:Point = projectPoint(firstCircle.x, firstCircle.y, ang, a);
         var h:Number = Math.sqrt(firstRadius * firstRadius - a * a);
 
         var firstIntersection:Point = new Point(
