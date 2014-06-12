@@ -7,10 +7,13 @@ package medkit.geom.shapes {
 import flash.geom.Matrix;
 
 import medkit.collection.spatial.Spatial;
+import medkit.geom.GeomUtil;
+import medkit.object.Cloneable;
+import medkit.object.CloningContext;
 import medkit.object.Equalable;
 import medkit.object.Hashable;
 
-public class Line2D implements Spatial, Shape2D, Equalable, Hashable {
+public class Line2D implements Spatial, Shape2D, Equalable, Hashable, Cloneable {
     /**
      * Returns an indicator of where the specified point {@code (px,py)} lies with respect to the line segment from
      * {@code (x1,y1)} to {@code (x2,y2)}. The return value can be either 1, -1, or 0 and indicates
@@ -330,6 +333,29 @@ public class Line2D implements Spatial, Shape2D, Equalable, Hashable {
 
     public function hashCode():int {
         return (y2 << 24) | (x2 << 16) | (y1 << 8) | x1;
+    }
+
+    public function clone(cloningContext:CloningContext = null):Cloneable {
+        var clone:Line2D;
+
+        if(cloningContext != null) {
+            clone = cloningContext.fetchClone(this);
+
+            if(clone != null)
+                return clone;
+
+            clone = cloningContext.registerClone(this, new Line2D());
+        }
+        else {
+            clone = new Line2D();
+        }
+
+        clone.x1 = this.x1;
+        clone.y1 = this.y1;
+        clone.x2 = this.x2;
+        clone.y2 = this.y2;
+
+        return clone;
     }
 
     public function relativeCCW(px:Number, py:Number):int {
