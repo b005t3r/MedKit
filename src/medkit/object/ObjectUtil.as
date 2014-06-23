@@ -14,6 +14,7 @@ import medkit.collection.ArrayUtil;
 import medkit.object.error.CloneNotRegisteredError;
 
 public class ObjectUtil {
+    [Inline]
     public static function equals(o1:*, o2:*):Boolean {
         if(o1 === o2) {
             return true;
@@ -89,6 +90,7 @@ public class ObjectUtil {
         }
     }
 
+    [Inline]
     public static function compare(o1:*, o2:*):int {
         if(o1 is Comparable && o2 is Comparable) {
             var e1:Comparable = o1 as Comparable;
@@ -161,6 +163,7 @@ public class ObjectUtil {
         }
     }
 
+    [Inline]
     public static function hashCode(o:*):int {
         if(o is Hashable) {
             var h:Hashable = o as Hashable;
