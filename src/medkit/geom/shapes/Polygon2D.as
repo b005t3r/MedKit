@@ -220,7 +220,26 @@ public class Polygon2D implements Shape2D, Equalable, Hashable, Cloneable, Spati
         if(_pointCount != poly._pointCount)
             return false;
 
-        return ObjectUtil.equals(_points, poly._points);
+        var startIndex:int, count:int = _points.length;
+        for(startIndex = 0; startIndex < count; ++startIndex) {
+            var point:Point2D = _points[startIndex];
+
+            if(ObjectUtil.equals(point, poly._points[0]))
+                break;
+        }
+
+        if(startIndex == count)
+            return false;
+
+        for(var i:int = 0; i < count; ++i) {
+            var polyPoint:Point2D = poly._points[i];
+            var thisPoint:Point2D = _points[(i + startIndex) % count];
+
+            if(! ObjectUtil.equals(thisPoint, polyPoint))
+                return false;
+        }
+
+        return true;
     }
 
     public function hashCode():int { return _bounds.hashCode(); }
