@@ -34,19 +34,19 @@ public class SpatialSet extends AbstractSet {
 
     internal var _modCount:int;
 
-    public function SpatialSet(bucketDefs:Array, spatializer:Spatializer = null, maxBuckets:int = 32) {
+    public function SpatialSet(bucketDefinitions:Array, spatializer:Spatializer = null, maxBuckets:int = 32) {
         var totalSize:int   = 1;
-        var count:int       = bucketDefs.length;
+        var count:int       = bucketDefinitions.length;
 
         if(count % 3 != 0)
-            throw new ArgumentError("bucketDefs has to be made out of sets of three values - min, max and bucket count");
+            throw new ArgumentError("bucketDefinitions has to be made out of sets of three values - min, max and bucket count");
 
         _bucketDefs = new Vector.<BucketDefinition>(count / 3, true);
 
         for(var i:int = 0; i < count; i += 3) {
-            var bucketSize:int  = bucketDefs[i];
-            var min:Number      = bucketDefs[i + 1];
-            var max:Number      = bucketDefs[i + 2];
+            var bucketSize:int  = bucketDefinitions[i];
+            var min:Number      = bucketDefinitions[i + 1];
+            var max:Number      = bucketDefinitions[i + 2];
 
             if(bucketSize <= 0)
                 throw new ArgumentError("size of each bucket has to be greater than 0");
