@@ -4,6 +4,7 @@
  * Time: 8:47
  */
 package medkit.collection.spatial {
+import medkit.collection.Collection;
 import medkit.collection.HashSet;
 import medkit.collection.error.ConcurrentModificationError;
 import medkit.collection.iterator.Iterator;
@@ -11,15 +12,15 @@ import medkit.collection.iterator.Iterator;
 public class SpatialSetIterator implements Iterator {
     private var _set:SpatialSet;
 
-    private var _tempSet:HashSet;
-    private var _tempSetIt:Iterator;
+    private var _tempCol:Collection;
+    private var _tempColIt:Iterator;
 
     private var _lastRet:BucketData;
     private var _expectedModCount:int;
 
     public function SpatialSetIterator(spatialSet:SpatialSet) {
         _set = spatialSet;
-        _tempSet = new HashSet();
+        _tempCol = new HashSet();
         _expectedModCount = _set._modCount;
 
         var bucketCount:int = spatialSet._bucketContents.length;
@@ -33,20 +34,19 @@ public class SpatialSetIterator implements Iterator {
             for(var j:int = 0; j < count; j++) {
                 var data:BucketData = bucket[j];
 
-                _tempSet.add(data);
+                _tempCol.add(data);
             }
-
         }
 
-        _tempSetIt = _tempSet.iterator();
+        _tempColIt = _tempCol.iterator();
     }
 
-    public function hasNext():Boolean { return _tempSetIt.hasNext(); }
+    public function hasNext():Boolean { return _tempColIt.hasNext(); }
 
     public function next():* {
         checkForConcurrentModification();
 
-        _lastRet = _tempSetIt.next();
+        _lastRet = _tempColIt.next();
 
         return _lastRet.object;
     }
@@ -57,7 +57,7 @@ public class SpatialSetIterator implements Iterator {
 
         checkForConcurrentModification();
 
-        _tempSetIt.remove();
+        _tempColIt.remove();
 
         try {
             _set.remove(_lastRet.object);
