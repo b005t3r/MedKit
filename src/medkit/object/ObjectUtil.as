@@ -341,7 +341,10 @@ public class ObjectUtil {
         return clazz;
     }
 
-    public static function getFullClassName(className):String {
+    public static function getFullClassName(className:String):String {
+        if(className.lastIndexOf("::") > 0)
+            return className;
+
         var classNames:Vector.<String> = ApplicationDomain.currentDomain.getQualifiedDefinitionNames();
 
         var count:int = classNames.length;
@@ -349,9 +352,12 @@ public class ObjectUtil {
             var fullClassName:String = classNames[i];
 
             var index:int = fullClassName.lastIndexOf(className);
+            var sepIndex:int = fullClassName.lastIndexOf("::");
 
-            if(index >= 0 && index + className.length == fullClassName.length)
+            if(index >= 0 && index + className.length == fullClassName.length && sepIndex + "::".length == index) {
+                //trace(className, "->", fullClassName);
                 return fullClassName;
+            }
         }
 
         return null;
