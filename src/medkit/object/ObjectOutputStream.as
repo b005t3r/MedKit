@@ -10,6 +10,8 @@ import flash.filesystem.FileStream;
 import flash.utils.Dictionary;
 import flash.utils.getQualifiedClassName;
 
+import medkit.enum.Enum;
+
 public class ObjectOutputStream {
     private var _jsonData:Object                = { serializedObjects : [], globalKeys : {} };
     private var _savedObjectIndexes:Dictionary  = new Dictionary();
@@ -72,13 +74,38 @@ public class ObjectOutputStream {
             else                    _context.members[key] = obj;
         }
         else if(typeof(value) != "object") {
-            if(value is Number && ((value as Number) * 0) != 0)
-                throw new ArgumentError("impossible to save NaN, Infinity or -Infinity values");
+            //if(value is Number && ((value as Number) * 0) != 0)
+            //    throw new ArgumentError("impossible to save NaN, Infinity or -Infinity values");
+
+            if(value is Number && value != value) {
+                if(_context == null)    _jsonData.globalKeys[key]   = { thisIsNaN : true };
+                else                    _context.members[key]       = { thisIsNaN : true };
+
+                return;
+            }
+            else if(value is Number && ((value as Number) * 0) < 0) {
+                if(_context == null)    _jsonData.globalKeys[key]   = { thisIsNegInf : true };
+                else                    _context.members[key]       = { thisIsNegInf : true };
+
+                return;
+            }
+            else if(value is Number && ((value as Number) * 0) > 0) {
+                if(_context == null)    _jsonData.globalKeys[key]   = { thisIsPosInf : true };
+                else                    _context.members[key]       = { thisIsPosInf : true };
+
+                return;
+            }
 
             obj = value;
 
             if(_context == null)    _jsonData.globalKeys[key] = obj;
             else                    _context.members[key] = obj;
+        }
+        else if(value is Enum) {
+            var e:Enum = value as Enum;
+
+            if(_context == null)    _jsonData.globalKeys[key] = { thisIsAnEnum : Enum.nameForEnum(e), className : getQualifiedClassName(value) };
+            else                    _context.members[key] = { thisIsAnEnum : Enum.nameForEnum(e), className : getQualifiedClassName(value) };
         }
         else if(_savedObjectIndexes[value] == null) {
             obj = { className : getQualifiedClassName(value), members : {}};

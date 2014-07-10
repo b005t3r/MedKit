@@ -9,6 +9,8 @@ package medkit.collection {
 import medkit.collection.iterator.Iterator;
 import medkit.object.Cloneable;
 import medkit.object.CloningContext;
+import medkit.object.ObjectInputStream;
+import medkit.object.ObjectOutputStream;
 import medkit.object.ObjectUtil;
 
 public class HashMap extends AbstractMap {
@@ -204,6 +206,20 @@ public class HashMap extends AbstractMap {
         clone._values       = null;
 
         return clone;
+    }
+
+    override public function readObject(input:ObjectInputStream):void {
+        table         = input.readObject("table") as Array;
+        _size         = input.readInt("size");
+        threshold     = input.readInt("threshold");
+        loadFactor    = input.readNumber("loadFactor");
+    }
+
+    override public function writeObject(output:ObjectOutputStream):void {
+        output.writeObject(table, "table");
+        output.writeInt(_size, "size");
+        output.writeInt(threshold, "threshold");
+        output.writeNumber(loadFactor, "loadFactor");
     }
 
     override public function keySet():Set {

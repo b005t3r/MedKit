@@ -9,6 +9,8 @@ package medkit.collection {
 import medkit.collection.iterator.Iterator;
 import medkit.object.Cloneable;
 import medkit.object.CloningContext;
+import medkit.object.ObjectInputStream;
+import medkit.object.ObjectOutputStream;
 import medkit.object.ObjectUtil;
 
 public class HashSet extends AbstractSet {
@@ -17,7 +19,7 @@ public class HashSet extends AbstractSet {
 
     private var map:HashMap;
 
-    private static const PRESENT:Object = {}; // dummy, empty object value
+    private static const PRESENT:Boolean = true; // dummy, empty object value
 
     public function HashSet(initialCapacity:int = HashSet.DEFAULT_INITIAL_CAPACITY, loadFactor:Number = HashSet.DEFAULT_LOAD_FACTOR) {
         map = new HashMap(initialCapacity, loadFactor)
@@ -70,6 +72,14 @@ public class HashSet extends AbstractSet {
         }
 
         return clone;
+    }
+
+    override public function readObject(input:ObjectInputStream):void {
+        map = input.readObject("map") as HashMap;
+    }
+
+    override public function writeObject(output:ObjectOutputStream):void {
+        output.writeObject(map, "map");
     }
 }
 

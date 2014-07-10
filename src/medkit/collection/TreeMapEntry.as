@@ -9,9 +9,11 @@ package medkit.collection {
 import medkit.object.Cloneable;
 import medkit.object.CloningContext;
 import medkit.object.Equalable;
+import medkit.object.ObjectInputStream;
+import medkit.object.ObjectOutputStream;
 import medkit.object.ObjectUtil;
 
-public class TreeMapEntry implements MapEntry{
+public class TreeMapEntry implements MapEntry {
     internal var key:*;
     internal var value:*;
     internal var left:TreeMapEntry;
@@ -72,6 +74,24 @@ public class TreeMapEntry implements MapEntry{
         clone.value     = cloningContext != null ? ObjectUtil.clone(this.value, cloningContext) : this.value;
 
         return clone;
+    }
+
+    public function readObject(input:ObjectInputStream):void {
+        key     = input.readObject("key");
+        value   = input.readObject("value");
+        left    = input.readObject("left") as TreeMapEntry;
+        right   = input.readObject("right") as TreeMapEntry;
+        parent  = input.readObject("parent") as TreeMapEntry;
+        color   = input.readBoolean("color");
+    }
+
+    public function writeObject(output:ObjectOutputStream):void {
+        output.writeObject(key, "key");
+        output.writeObject(value, "value");
+        output.writeObject(left, "left");
+        output.writeObject(right, "right");
+        output.writeObject(parent, "parent");
+        output.writeBoolean(color, "color");
     }
 
     public function toString():String {

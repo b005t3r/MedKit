@@ -9,12 +9,13 @@ import medkit.collection.iterator.Iterator;
 import medkit.object.Cloneable;
 import medkit.object.Equalable;
 import medkit.object.Hashable;
+import medkit.object.Serializable;
 
 /**
  * Basic Collection interface.
  * Based on Java-Collection-Framework.
  */
-public interface Collection extends Equalable, Hashable, Cloneable {
+public interface Collection extends Equalable, Hashable, Cloneable, Serializable {
     /**
      * Ensures that this collection contains the specified element (optional operation).
      *

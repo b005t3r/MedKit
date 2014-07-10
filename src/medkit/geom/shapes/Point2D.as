@@ -8,8 +8,11 @@ import flash.geom.Point;
 
 import medkit.collection.spatial.Spatial;
 import medkit.object.Hashable;
+import medkit.object.ObjectInputStream;
+import medkit.object.ObjectOutputStream;
+import medkit.object.Serializable;
 
-public class Point2D extends Point implements Hashable, Spatial {
+public class Point2D extends Point implements Hashable, Spatial, Serializable {
     public function Point2D(x:Number = 0, y:Number = 0) {
         super(x, y);
     }
@@ -46,6 +49,16 @@ public class Point2D extends Point implements Hashable, Spatial {
 
     override public function clone():Point {
         return new Point2D(x, y);
+    }
+
+    public function readObject(input:ObjectInputStream):void {
+        x = input.readNumber("x");
+        y = input.readNumber("y");
+    }
+
+    public function writeObject(output:ObjectOutputStream):void {
+        output.writeNumber(x, "x");
+        output.writeNumber(y, "y");
     }
 
     public function get indexCount():int { return 2; }

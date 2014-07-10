@@ -9,8 +9,9 @@ package medkit.collection {
 import medkit.object.Cloneable;
 import medkit.object.Equalable;
 import medkit.object.Hashable;
+import medkit.object.Serializable;
 
-public interface Map extends Cloneable, Equalable, Hashable {
+public interface Map extends Cloneable, Equalable, Hashable, Serializable {
     /**
      * Returns true if this collection contains no elements.
      *

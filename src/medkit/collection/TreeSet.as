@@ -13,7 +13,7 @@ import medkit.object.Comparator;
 import medkit.object.ObjectUtil;
 
 public class TreeSet extends AbstractSet implements NavigableSet, Cloneable {
-    private static const PRESENT:Object = {};
+    private static const PRESENT:Boolean = true;
 
     private var m:NavigableMap;
 

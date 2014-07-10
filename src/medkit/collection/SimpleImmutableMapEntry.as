@@ -11,6 +11,8 @@ import flash.errors.IllegalOperationError;
 import medkit.object.Cloneable;
 import medkit.object.CloningContext;
 import medkit.object.Equalable;
+import medkit.object.ObjectInputStream;
+import medkit.object.ObjectOutputStream;
 import medkit.object.ObjectUtil;
 
 public class SimpleImmutableMapEntry implements MapEntry {
@@ -54,6 +56,16 @@ public class SimpleImmutableMapEntry implements MapEntry {
         );
 
         return e;
+    }
+
+    public function readObject(input:ObjectInputStream):void {
+        key     = input.readObject("key");
+        value   = input.readObject("value");
+    }
+
+    public function writeObject(output:ObjectOutputStream):void {
+        output.writeObject(key, "key");
+        output.writeObject(value, "value");
     }
 
     public function toString():String {

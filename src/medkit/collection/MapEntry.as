@@ -9,8 +9,9 @@ package medkit.collection {
 import medkit.object.Cloneable;
 import medkit.object.Equalable;
 import medkit.object.Hashable;
+import medkit.object.Serializable;
 
-public interface MapEntry extends Equalable, Hashable, Cloneable {
+public interface MapEntry extends Equalable, Hashable, Cloneable, Serializable {
     /**
      * Returns the key corresponding to this entry.
      *

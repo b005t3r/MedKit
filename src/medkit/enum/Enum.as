@@ -34,6 +34,26 @@ public class Enum implements Equalable, Comparable, Hashable, Cloneable {
         return allConstants;
     }
 
+    public static function enumForName(name:String, clazz:Class):Enum {
+        var className:String    = getQualifiedClassName(clazz);
+        var allConstants:Array  = allConstantByClass[className];
+
+        if(allConstants == null)
+            throw new IllegalOperationError("initEnums() was not called for class " + className);
+
+        var count:int = allConstants.length;
+        for(var i:int = 0; i < count; ++i) {
+            var e:Enum = allConstants[i];
+
+            if(e.value == name)
+                return e;
+        }
+
+        return null;
+    }
+
+    public static function nameForEnum(e:Enum):String { return e.value; }
+
     protected static function initEnums(clazz:Class):void {
         var type:XML            = describeType(clazz);
         var className:String    = getQualifiedClassName(clazz);

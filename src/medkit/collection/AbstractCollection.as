@@ -13,6 +13,8 @@ import medkit.collection.iterator.Iterator;
 import medkit.object.Cloneable;
 import medkit.object.CloningContext;
 import medkit.object.Equalable;
+import medkit.object.ObjectInputStream;
+import medkit.object.ObjectOutputStream;
 import medkit.object.ObjectUtil;
 import medkit.string.StringBuilder;
 
@@ -56,6 +58,14 @@ public class AbstractCollection implements Collection {
     }
 
     public function clone(cloningContext:CloningContext = null):Cloneable {
+        throw new DefinitionError("This method is not implemented");
+    }
+
+    public function readObject(input:ObjectInputStream):void {
+        throw new DefinitionError("This method is not implemented");
+    }
+
+    public function writeObject(output:ObjectOutputStream):void {
         throw new DefinitionError("This method is not implemented");
     }
 

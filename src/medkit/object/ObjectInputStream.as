@@ -10,6 +10,8 @@ import flash.filesystem.FileStream;
 import flash.utils.Dictionary;
 import flash.utils.getDefinitionByName;
 
+import medkit.enum.Enum;
+
 public class ObjectInputStream {
     private var _jsonData:Object;
     private var _loadedObjectsByIndex:Dictionary    = new Dictionary();
@@ -102,8 +104,17 @@ public class ObjectInputStream {
         if(typeof(obj) != "object")
             return obj;
 
-        if(ObjectUtil.getClass(obj) == Object && obj.hasOwnProperty("thisIsANullObject"))
-            return null;
+        if(ObjectUtil.getClass(obj)) {
+            if(obj.hasOwnProperty("thisIsANullObject")) { return null;}
+            else if(obj.hasOwnProperty("thisIsNaN"))    { return NaN;}
+            else if(obj.hasOwnProperty("thisIsNegInf")) { return -Infinity;}
+            else if(obj.hasOwnProperty("thisIsPosInf")) { return Infinity;}
+            else if(obj.hasOwnProperty("thisIsAnEnum")) {
+                var enumClass:Class = getDefinitionByName(obj.className) as Class;
+
+                return Enum.enumForName(obj.thisIsAnEnum, enumClass);
+            }
+        }
 
         var index:int = obj.objectIndex;
         obj = _loadedObjectsByIndex[index];

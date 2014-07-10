@@ -8,6 +8,8 @@ package medkit.collection {
 import medkit.object.Cloneable;
 import medkit.object.CloningContext;
 import medkit.object.Equalable;
+import medkit.object.ObjectInputStream;
+import medkit.object.ObjectOutputStream;
 import medkit.object.ObjectUtil;
 
 public class HashMapEntry implements MapEntry {
@@ -78,6 +80,20 @@ public class HashMapEntry implements MapEntry {
         clone.next  = ObjectUtil.clone(this.next, cloningContext);  // always clone 'next'
 
         return clone;
+    }
+
+    public function readObject(input:ObjectInputStream):void {
+        key     = input.readObject("key");
+        value   = input.readObject("value");
+        next    = input.readObject("next") as HashMapEntry;
+        hash    = input.readInt("hash");
+    }
+
+    public function writeObject(output:ObjectOutputStream):void {
+        output.writeObject(key, "key");
+        output.writeObject(value, "value");
+        output.writeObject(next, "next");
+        output.writeInt(hash, "hash");
     }
 
     public function toString():String {

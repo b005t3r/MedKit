@@ -9,6 +9,8 @@ import medkit.collection.iterator.Iterator;
 import medkit.collection.iterator.ListIterator;
 import medkit.object.Cloneable;
 import medkit.object.CloningContext;
+import medkit.object.ObjectInputStream;
+import medkit.object.ObjectOutputStream;
 import medkit.object.ObjectUtil;
 
 public class ArrayList extends AbstractList {
@@ -108,6 +110,16 @@ public class ArrayList extends AbstractList {
             clone.elementData[i] = cloningContext != null ? ObjectUtil.clone(this.elementData[i], cloningContext) : this.elementData[i];
 
         return clone;
+    }
+
+    override public function readObject(input:ObjectInputStream):void {
+        _size       = input.readInt("size");
+        elementData = input.readObject("elementData") as Array;
+    }
+
+    override public function writeObject(output:ObjectOutputStream):void {
+        output.writeInt(_size, "size");
+        output.writeObject(elementData, "elementData");
     }
 
     override public function toArray():Array {
