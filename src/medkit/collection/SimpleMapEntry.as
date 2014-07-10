@@ -16,7 +16,8 @@ public class SimpleMapEntry implements MapEntry {
     private var key:*;
     private var value:*;
 
-    public function SimpleMapEntry(key:*, value:*) {
+    // undefined params for serialization purposes only
+    public function SimpleMapEntry(key:* = undefined, value:* = undefined) {
         this.key = key;
         this.value = value;
     }

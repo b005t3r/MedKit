@@ -21,7 +21,8 @@ public class TreeMapEntry implements MapEntry {
     internal var parent:TreeMapEntry;
     internal var color:Boolean = TreeMap.BLACK;
 
-    public function TreeMapEntry(key:*, value:*, parent:*) {
+    // undefined params for serialization purposes only
+    public function TreeMapEntry(key:* = undefined, value:* = undefined, parent:* = undefined) {
         this.key    = key;
         this.value  = value;
         this.parent = parent;

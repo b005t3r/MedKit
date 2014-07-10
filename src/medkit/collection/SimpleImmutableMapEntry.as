@@ -19,7 +19,8 @@ public class SimpleImmutableMapEntry implements MapEntry {
     private var key:*;
     private var value:*;
 
-    public function SimpleImmutableMapEntry(key:*, value:*) {
+    // undefined params for serialization purposes only
+    public function SimpleImmutableMapEntry(key:* = undefined, value:* = undefined) {
         this.key = key;
         this.value = value;
     }

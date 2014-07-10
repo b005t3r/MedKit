@@ -18,7 +18,8 @@ public class HashMapEntry implements MapEntry {
     internal var next:HashMapEntry;
     internal var hash:int;
 
-    public function HashMapEntry(h:int, k:*, v:*, n:HashMapEntry) {
+    // undefined params for serialization purposes only
+    public function HashMapEntry(h:int = undefined, k:* = undefined, v:* = undefined, n:HashMapEntry = undefined) {
         value   = v;
         next    = n;
         key     = k;
