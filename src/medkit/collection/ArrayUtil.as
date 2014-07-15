@@ -44,6 +44,17 @@ public class ArrayUtil {
         return -1;
     }
 
+    public static function allValuesOfClass(array:Array, clazz:Class, result:Array = null):Array {
+        if(result == null) result = [];
+
+        var count:int = array.length;
+        for(var i:int = 0; i < count; i++)
+            if(array[i] is clazz)
+                result[result.length] = array[i];
+
+        return result;
+    }
+
     public static function indexOfValueMatchingCriteria(array:Array, matchCriteria:Function):int {
         var count:int = array.length;
         for(var i:int = 0; i < count; i++)
