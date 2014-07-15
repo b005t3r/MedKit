@@ -83,7 +83,7 @@ public class EvenOdd extends Crossings {
         }
 
         if(to < from && from < limit)
-            VectorUtil.arrayCopy(yranges as Vector, from, yranges as Vector, to, limit - from);
+            VectorUtil.arrayCopy(yranges, from, yranges, to, limit - from);
 
         to += (limit - from);
 
@@ -91,7 +91,7 @@ public class EvenOdd extends Crossings {
             if(to >= yranges.length) {
                 var newRanges:Vector.<Number> = new Vector.<Number>(to + 10);
 
-                VectorUtil.arrayCopy(yranges as Vector, 0, newRanges as Vector, 0, to);
+                VectorUtil.arrayCopy(yranges, 0, newRanges, 0, to);
                 yranges = newRanges;
             }
 

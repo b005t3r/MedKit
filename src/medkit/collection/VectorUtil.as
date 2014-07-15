@@ -5,7 +5,7 @@
  */
 package medkit.collection {
 public class VectorUtil {
-    public static function arrayCopy(src:Vector, srcPos:int, dest:Vector, destPos:int, length:int):void {
+    public static function arrayCopy(src:*, srcPos:int, dest:*, destPos:int, length:int):void {
         if(src == null)                     throw new ArgumentError("Source array must not be null");
         if(dest == null)                    throw new ArgumentError("Destination array must not be null");
         if(srcPos < 0)                      throw new RangeError("Source index must be greater or equal to 0");
@@ -24,7 +24,7 @@ public class VectorUtil {
         }
     }
 
-    public static function indexOfValueOfClass(vector:Vector, clazz:Class):int {
+    public static function indexOfValueOfClass(vector:Vector.<*>, clazz:Class):int {
         var count:int = vector.length;
         for(var i:int = 0; i < count; i++)
             if(vector[i] is clazz)
@@ -33,7 +33,14 @@ public class VectorUtil {
         return -1;
     }
 
-    public static function indexOfValueMatchingCriteria(vector:Vector, matchCriteria:Function):int {
+    public static function allValuesOfClass(vector:*, clazz:Class, result:*):void {
+        var count:int = vector.length;
+        for(var i:int = 0; i < count; i++)
+            if(vector[i] is clazz)
+                result[result.length] = vector[i];
+    }
+
+    public static function indexOfValueMatchingCriteria(vector:Vector.<*>, matchCriteria:Function):int {
         var count:int = vector.length;
         for(var i:int = 0; i < count; i++)
             if(matchCriteria(vector[i]))

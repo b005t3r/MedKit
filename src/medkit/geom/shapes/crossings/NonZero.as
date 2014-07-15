@@ -37,8 +37,8 @@ public class NonZero extends Crossings {
         limit -= 2;
         var rem:int= limit - cur;
         if (rem > 0) {
-            VectorUtil.arrayCopy(yranges as Vector, cur+2, yranges as Vector, cur, rem);
-            VectorUtil.arrayCopy(crosscounts as Vector, cur/2+1, crosscounts as Vector, cur/2, rem/2);
+            VectorUtil.arrayCopy(yranges, cur+2, yranges , cur, rem);
+            VectorUtil.arrayCopy(crosscounts , cur/2+1, crosscounts , cur/2, rem/2);
         }
     }
 
@@ -49,14 +49,14 @@ public class NonZero extends Crossings {
 
         if (limit >= yranges.length) {
             yranges = Vector.<Number>(limit+10);
-            VectorUtil.arrayCopy(oldranges as Vector, 0, yranges as Vector, 0, cur);
+            VectorUtil.arrayCopy(oldranges , 0, yranges , 0, cur);
             crosscounts = new Vector.<int>((limit+10)/2);
-            VectorUtil.arrayCopy(oldcounts as Vector, 0, crosscounts as Vector, 0, cur/2);
+            VectorUtil.arrayCopy(oldcounts , 0, crosscounts , 0, cur/2);
         }
 
         if (rem > 0) {
-            VectorUtil.arrayCopy(oldranges as Vector, cur, yranges as Vector, cur+2, rem);
-            VectorUtil.arrayCopy(oldcounts as Vector, cur/2, crosscounts as Vector, cur/2+1, rem/2);
+            VectorUtil.arrayCopy(oldranges , cur, yranges , cur+2, rem);
+            VectorUtil.arrayCopy(oldcounts , cur/2, crosscounts , cur/2+1, rem/2);
         }
 
         yranges[cur+0] = lo;
