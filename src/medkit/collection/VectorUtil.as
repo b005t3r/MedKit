@@ -24,7 +24,7 @@ public class VectorUtil {
         }
     }
 
-    public static function indexOfValueOfClass(vector:Vector.<*>, clazz:Class):int {
+    public static function indexOfValueOfClass(vector:*, clazz:Class):int {
         var count:int = vector.length;
         for(var i:int = 0; i < count; i++)
             if(vector[i] is clazz)
@@ -40,7 +40,7 @@ public class VectorUtil {
                 result[result.length] = vector[i];
     }
 
-    public static function indexOfValueMatchingCriteria(vector:Vector.<*>, matchCriteria:Function):int {
+    public static function indexOfValueMatchingCriteria(vector:*, matchCriteria:Function):int {
         var count:int = vector.length;
         for(var i:int = 0; i < count; i++)
             if(matchCriteria(vector[i]))
