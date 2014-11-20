@@ -352,6 +352,13 @@ public class ObjectUtil {
             var fullClassName:String = classNames[i];
 
             var index:int = fullClassName.lastIndexOf(className);
+
+            // className equals fullClassName
+            if(index == 0)
+                return fullClassName;
+
+            // className is only a part of fullClassName
+            // check if this fullClassName's last section equals className
             var sepIndex:int = fullClassName.lastIndexOf("::");
 
             if(index >= 0 && index + className.length == fullClassName.length && sepIndex + "::".length == index) {
