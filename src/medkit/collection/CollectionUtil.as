@@ -6,6 +6,7 @@
 
 package medkit.collection {
 
+import medkit.collection.iterator.Iterator;
 import medkit.collection.iterator.ListIterator;
 import medkit.object.Comparable;
 import medkit.object.Comparable;
@@ -28,19 +29,19 @@ public class CollectionUtil {
         var a:Array = list.toArray();
 
         if(cmp == null) {
-            a.sort(function(objectA:*, objectB:*):Number {
+            a.sort(function (objectA:*, objectB:*):Number {
                 return ObjectUtil.compare(objectA, objectB);
             });
         }
         else {
-            a.sort(function(objectA:*, objectB:*):Number {
+            a.sort(function (objectA:*, objectB:*):Number {
                 return cmp.compare(objectA, objectB);
             });
         }
 
         var i:ListIterator = list.listIterator();
 
-        for (var j:int = 0; j < a.length; ++j) {
+        for(var j:int = 0; j < a.length; ++j) {
             i.next();
             i.set(a[j]);
         }
@@ -93,7 +94,53 @@ public class CollectionUtil {
 
             return -(low + 1);  // key not found
         }
+    }
 
+    /**
+     * Returns <tt>true</tt> if the two specified collections have no
+     * elements in common.
+     *
+     * <p>Care must be exercised if this method is used on collections that
+     * do not comply with the general contract for <tt>Collection</tt>.
+     * Implementations may elect to iterate over either collection and test
+     * for containment in the other collection (or to perform any equivalent
+     * computation).  If either collection uses a nonstandard equality test
+     * (as does a {@link SortedSet} whose ordering is not <i>compatible with
+     * equals</i>, or the key set of an {@link IdentityHashMap}), both
+     * collections must use the same nonstandard equality test, or the
+     * result of this method is undefined.
+     *
+     * <p>Note that it is permissible to pass the same collection in both
+     * parameters, in which case the method will return true if and only if
+     * the collection is empty.
+     *
+     * @param c1 a collection
+     * @param c2 a collection
+     * @throws NullPointerException if either collection is null
+     * @since 1.5
+     */
+    public static function disjoint(c1:Collection, c2:Collection):Boolean {
+        /*
+         * We're going to iterate through c1 and test for inclusion in c2.
+         * If c1 is a Set and c2 isn't, swap the collections.  Otherwise,
+         * place the shorter collection in c1.  Hopefully this heuristic
+         * will minimize the cost of the operation.
+         */
+        if((c1 is Set) && !(c2 is Set) || (c1.size() > c2.size())) {
+            var tmp:Collection = c1;
+            c1 = c2;
+            c2 = tmp;
+        }
+
+        var iterator:Iterator = c1.iterator();
+        while(iterator.hasNext()) {
+            var e:* = iterator.next();
+
+            if(c2.contains(e))
+                return false;
+        }
+
+        return true;
     }
 }
 }
