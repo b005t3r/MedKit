@@ -149,17 +149,24 @@ public class ObjectInputStream {
                     continue;
                 }
 
-                var arrElemIndex:int = arrElem.objectIndex;
-                arrElem = _loadedObjectsByIndex[arrElemIndex];
+                var arrElemIndex:int = arrElem.hasOwnProperty("objectIndex") ? arrElem.objectIndex : -1;
+                // it is an object, but not serialized, e.g. an Enum
+                if(arrElemIndex == -1) {
+                    arrElem = readAny(arrKey);
+                }
+                else {
+                    arrElem = _loadedObjectsByIndex[arrElemIndex];
 
-                if(arrElem != null) {
-                    arr[arrIndex] = arrElem;
-                    continue;
+                    if(arrElem != null) {
+                        arr[arrIndex] = arrElem;
+                        continue;
+                    }
+
+                    arrElem = readAny(arrKey);
+
+                    _loadedObjectsByIndex[arrElemIndex] = arrElem;
                 }
 
-                arrElem = readAny(arrKey);
-
-                _loadedObjectsByIndex[arrElemIndex] = arrElem;
                 arr[arrIndex] = arrElem;
             }
 
@@ -177,17 +184,24 @@ public class ObjectInputStream {
                     continue;
                 }
 
-                var dictElemIndex:int = dictElem.objectIndex;
-                dictElem = _loadedObjectsByIndex[dictElemIndex];
+                var dictElemIndex:int = dictElem.hasOwnProperty("objectIndex") ? dictElem.objectIndex : -1;
+                // it is an object, but not serialized, e.g. an Enum
+                if(dictElemIndex == -1) {
+                    dictElem = readAny(dictKey);
+                }
+                else {
+                    dictElem = _loadedObjectsByIndex[dictElemIndex];
 
-                if(dictElem != null) {
-                    dict[dictKey] = dictElem;
-                    continue;
+                    if(dictElem != null) {
+                        dict[dictKey] = dictElem;
+                        continue;
+                    }
+
+                    dictElem = readAny(dictKey);
+
+                    _loadedObjectsByIndex[dictElemIndex] = dictElem;
                 }
 
-                dictElem = readAny(dictKey);
-
-                _loadedObjectsByIndex[dictElemIndex] = dictElem;
                 dict[dictKey] = dictElem;
             }
 

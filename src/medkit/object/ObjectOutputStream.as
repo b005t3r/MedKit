@@ -138,7 +138,7 @@ public class ObjectOutputStream {
 
                 for(var dictKey:Object in dict) {
                     if(dictKey is String == false)
-                        throw new TypeError("ale keys of serialized Dictionary has to be Strings");
+                        throw new TypeError("all keys of serialized Dictionary has to be Strings");
 
                     var dictElem:* = dict[dictKey];
 
