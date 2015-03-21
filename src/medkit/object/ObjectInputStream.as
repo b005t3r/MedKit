@@ -172,7 +172,7 @@ public class ObjectInputStream {
 
             retVal = arr;
         }
-        else if(clazz == Dictionary || clazz == Object) {
+        else if(clazz == Dictionary) {
             var dict:Dictionary = new Dictionary();
             _loadedObjectsByIndex[index] = dict;
 
@@ -206,6 +206,41 @@ public class ObjectInputStream {
             }
 
             retVal = dict;
+        }
+        else if(clazz == Object) {
+            var object:Object = {};
+            _loadedObjectsByIndex[index] = object;
+
+            for (var objectKey:String in _context.members) {
+                var objectElem:* = _context.members[objectKey];
+
+                if(typeof(objectElem) != "object") {
+                    object[objectKey] = objectElem;
+                    continue;
+                }
+
+                var objectElemIndex:int = objectElem.hasOwnProperty("objectIndex") ? objectElem.objectIndex : -1;
+                // it is an object, but not serialized, e.g. an Enum
+                if(objectElemIndex == -1) {
+                    objectElem = readAny(objectKey);
+                }
+                else {
+                    objectElem = _loadedObjectsByIndex[objectElemIndex];
+
+                    if(objectElem != null) {
+                        object[objectKey] = objectElem;
+                        continue;
+                    }
+
+                    objectElem = readAny(objectKey);
+
+                    _loadedObjectsByIndex[objectElemIndex] = objectElem;
+                }
+
+                object[objectKey] = objectElem;
+            }
+
+            retVal = object;
         }
         else if(tmpInstance is Serializable) {
             var serializable:Serializable = tmpInstance as Serializable;

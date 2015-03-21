@@ -148,7 +148,7 @@ public class ObjectOutputStream {
                     else                                                        writeAny(dictElem, dictKey as String);
                 }
             }
-            else if(ObjectUtil.getClass(value) == obj) {
+            else if(ObjectUtil.getClass(value) == Object) {
                 var o:Object = value as Object;
 
                 for(var oKey:String in o) {
