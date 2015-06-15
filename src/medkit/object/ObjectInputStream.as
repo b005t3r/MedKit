@@ -22,7 +22,9 @@ public class ObjectInputStream {
     }
 
     public static function readFromFileStream(stream:FileStream, closeStream:Boolean = true):ObjectInputStream {
-        var retVal:ObjectInputStream = readFromJSONString(stream.readUTF());
+        var length:uint = stream.readUnsignedInt();
+        var string:String = stream.readUTFBytes(length);
+        var retVal:ObjectInputStream = readFromJSONString(string);
 
         if(closeStream)
             stream.close();

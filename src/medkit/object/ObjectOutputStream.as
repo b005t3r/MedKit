@@ -24,7 +24,10 @@ public class ObjectOutputStream {
     }
 
     public function saveToFileStream(stream:FileStream, closeStream:Boolean = true):void {
-        stream.writeUTF(saveToJSONString());
+        var string:String = saveToJSONString();
+
+        stream.writeUnsignedInt(string.length);
+        stream.writeUTFBytes(string);
 
         if(closeStream)
             stream.close();
