@@ -34,7 +34,8 @@ public class ArrayList extends AbstractList {
         elementData.length = _size;
     }
 
-    public function ensureCapacity(minCapacity:int):void {
+    [Inline]
+    public final function ensureCapacity(minCapacity:int):void {
         modCount++;
 
         var oldCapacity:int = elementData.length;
@@ -269,7 +270,8 @@ public class ArrayList extends AbstractList {
             elementData[--_size] = null;
     }
 
-    internal function subListRangeCheck(fromIndex:int, toIndex:int, size:int):void {
+    [Inline]
+    internal final function subListRangeCheck(fromIndex:int, toIndex:int, size:int):void {
         if (fromIndex < 0)
             throw new RangeError("fromIndex = " + fromIndex);
 
@@ -279,7 +281,8 @@ public class ArrayList extends AbstractList {
             throw new RangeError("fromIndex(" + fromIndex + ") > toIndex(" + toIndex + ")");
     }
 
-    private function batchRemove(c:Collection, complement:Boolean):Boolean {
+    [Inline]
+    private final function batchRemove(c:Collection, complement:Boolean):Boolean {
         var r:int = 0, w:int = 0, modified:Boolean = false;
 
         for (; r < _size; r++)
@@ -303,7 +306,8 @@ public class ArrayList extends AbstractList {
         return modified;
     }
 
-    private function fastRemove(index:int):void {
+    [Inline]
+    private final function fastRemove(index:int):void {
         modCount++;
 
         var numMoved:int = _size - index - 1;
@@ -314,21 +318,24 @@ public class ArrayList extends AbstractList {
         elementData[--_size] = null; // Let gc do its work
     }
 
+    [Inline]
     private final function rangeCheck(index:int):void {
         if(index >= _size)
             throw new RangeError(outOfBoundsMsg(index));
     }
 
+    [Inline]
     private final function rangeCheckForAdd(index:int):void {
         if (index > _size || index < 0)
             throw new RangeError(outOfBoundsMsg(index));
     }
 
-        /**
-         * Constructs an IndexOutOfBoundsException detail message.
-         * Of the many possible refactorings of the error handling code,
-         * this "outlining" performs best with both server and client VMs.
-         */
+    /**
+     * Constructs an IndexOutOfBoundsException detail message.
+     * Of the many possible refactorings of the error handling code,
+     * this "outlining" performs best with both server and client VMs.
+     */
+    [Inline]
     private final function outOfBoundsMsg(index:int):String {
         return "Index: "+index+", Size: "+size;
     }

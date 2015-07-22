@@ -207,7 +207,8 @@ public class ObjectUtil {
 
         return memoryHash;
     }
-    
+
+    [Inline]
     public static function clone(o:*, context:CloningContext):* {
         if(o == null) {
             return null;
@@ -240,6 +241,7 @@ public class ObjectUtil {
         }
     }
 
+    [Inline]
     private static function cloneArray(array:Array, context:CloningContext):Array {
         var arrayCopy:Array = null;
 
@@ -283,6 +285,7 @@ public class ObjectUtil {
         return arrayCopy;
     }
 
+    [Inline]
     private static function cloneCloneable(cloneable:Cloneable, context:CloningContext):Cloneable {
         // shallow clone
         if(context == null)
@@ -335,12 +338,14 @@ public class ObjectUtil {
         return clone;
     }
 
+    [Inline]
     public static function getClass(o:*):Class {
         var clazz:Class = Object(o).constructor;
 
         return clazz;
     }
 
+    [Inline]
     public static function getFullClassName(className:String):String {
         if(className.lastIndexOf("::") > 0)
             return className;

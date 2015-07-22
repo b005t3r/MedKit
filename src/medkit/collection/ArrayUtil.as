@@ -7,6 +7,7 @@
 package medkit.collection {
 
 public class ArrayUtil {
+    [Inline]
     public static function copyOf(array:Array, capacity:int):Array {
         var copy:Array = new Array(capacity);
 
@@ -16,6 +17,7 @@ public class ArrayUtil {
         return copy;
     }
 
+    [Inline]
     public static function arrayCopy(src:Array, srcPos:int, dest:Array, destPos:int, length:int):void {
         if(src == null)                     throw new ArgumentError("Source array must not be null");
         if(dest == null)                    throw new ArgumentError("Destination array must not be null");
@@ -35,6 +37,7 @@ public class ArrayUtil {
         }
     }
 
+    [Inline]
     public static function indexOfValueOfClass(array:Array, clazz:Class):int {
         var count:int = array.length;
         for(var i:int = 0; i < count; i++)
@@ -44,6 +47,7 @@ public class ArrayUtil {
         return -1;
     }
 
+    [Inline]
     public static function allValuesOfClass(array:Array, clazz:Class, result:Array = null):Array {
         if(result == null) result = [];
 
@@ -55,6 +59,7 @@ public class ArrayUtil {
         return result;
     }
 
+    [Inline]
     public static function indexOfValueMatchingCriteria(array:Array, matchCriteria:Function):int {
         var count:int = array.length;
         for(var i:int = 0; i < count; i++)

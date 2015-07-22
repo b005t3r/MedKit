@@ -116,7 +116,7 @@ public class SimpleSerializableTest {
 
         assertEquals(a, v);
 
-        var b:int = 0xFFFFFFFF;
+        var b:int = 0x7FFFFFFF;
 
         output.writeInt(b, "b");
 
