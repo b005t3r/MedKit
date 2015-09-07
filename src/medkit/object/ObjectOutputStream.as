@@ -7,6 +7,7 @@ package medkit.object {
 import flash.filesystem.File;
 import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
+import flash.utils.ByteArray;
 import flash.utils.Dictionary;
 import flash.utils.getQualifiedClassName;
 
@@ -25,9 +26,10 @@ public class ObjectOutputStream {
 
     public function saveToFileStream(stream:FileStream, closeStream:Boolean = true):void {
         var string:String = saveToJSONString();
-
-        stream.writeUnsignedInt(string.length);
-        stream.writeUTFBytes(string);
+        var bytes:ByteArray = new ByteArray();
+        bytes.writeUTFBytes(string);
+        stream.writeUnsignedInt(bytes.position);
+        stream.writeBytes(bytes);
 
         if(closeStream)
             stream.close();

@@ -7,6 +7,7 @@ package medkit.object {
 import flash.filesystem.File;
 import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
+import flash.utils.ByteArray;
 import flash.utils.Dictionary;
 import flash.utils.getDefinitionByName;
 
@@ -23,7 +24,9 @@ public class ObjectInputStream {
 
     public static function readFromFileStream(stream:FileStream, closeStream:Boolean = true):ObjectInputStream {
         var length:uint = stream.readUnsignedInt();
-        var string:String = stream.readUTFBytes(length);
+        var bytes:ByteArray = new ByteArray();
+        stream.readBytes(bytes, 0, length);
+        var string:String = bytes.readUTFBytes(length);
         var retVal:ObjectInputStream = readFromJSONString(string);
 
         if(closeStream)
