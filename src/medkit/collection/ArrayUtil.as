@@ -5,6 +5,8 @@
  */
 
 package medkit.collection {
+import medkit.collection.iterator.ListIterator;
+import medkit.random.Random;
 
 public class ArrayUtil {
     [Inline]
@@ -67,6 +69,22 @@ public class ArrayUtil {
                 return i;
 
         return -1;
+    }
+
+    public static function shuffle(arr:Array, rnd:Random = null):void {
+        if(rnd == null)
+            rnd = Random.fromDate();
+
+        var i:int, size:int = arr.size();
+
+        for(i = size; i > 1; --i)
+            swap(arr, i - 1, rnd.nextUnsignedInteger() % i);
+    }
+
+    public static function swap(a:Array, i:int, j:int):void {
+        var tmp:* = a[i];
+        a[i] = a[j];
+        a[j] = tmp;
     }
 }
 }
