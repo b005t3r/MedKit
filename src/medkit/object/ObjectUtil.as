@@ -170,6 +170,12 @@ public class ObjectUtil {
 
             return h.hashCode();
         }
+        else if(o is int || o is uint || o is Boolean) {
+            return int(o);
+        }
+        else if(o is Number) {
+            return int(o) ^ int(Number(o) * 1000000);
+        }
         else if(o is String) {
             var s:String    = o as String;
             var c:int       = 0;
