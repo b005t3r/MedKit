@@ -61,7 +61,7 @@ public interface Collection extends Equalable, Hashable, Cloneable, Serializable
     function isEmpty():Boolean;
 
     /**
-     * Returns an iterator over the elements in this list.
+     * Returns an iterator over the elements in this collection.
      *
      * @returns Iterator
      */
