@@ -17,6 +17,7 @@ public class CollectionTestSuite {
     public var hashSetTest:HashSetTest;
     public var treeMapTest:TreeMapTest;
     public var treeSetTest:TreeSetTest;
+    public var hashMultiSetTest:HashMultiSetTest;
 }
 
 }
