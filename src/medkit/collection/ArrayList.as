@@ -34,7 +34,6 @@ public class ArrayList extends AbstractList {
         elementData.length = _size;
     }
 
-    [Inline]
     public final function ensureCapacity(minCapacity:int):void {
         modCount++;
 
@@ -270,7 +269,6 @@ public class ArrayList extends AbstractList {
             elementData[--_size] = null;
     }
 
-    [Inline]
     internal final function subListRangeCheck(fromIndex:int, toIndex:int, size:int):void {
         if (fromIndex < 0)
             throw new RangeError("fromIndex = " + fromIndex);
@@ -281,7 +279,6 @@ public class ArrayList extends AbstractList {
             throw new RangeError("fromIndex(" + fromIndex + ") > toIndex(" + toIndex + ")");
     }
 
-    [Inline]
     private final function batchRemove(c:Collection, complement:Boolean):Boolean {
         var r:int = 0, w:int = 0, modified:Boolean = false;
 
@@ -306,7 +303,6 @@ public class ArrayList extends AbstractList {
         return modified;
     }
 
-    [Inline]
     private final function fastRemove(index:int):void {
         modCount++;
 
@@ -318,13 +314,11 @@ public class ArrayList extends AbstractList {
         elementData[--_size] = null; // Let gc do its work
     }
 
-    [Inline]
     private final function rangeCheck(index:int):void {
         if(index >= _size)
             throw new RangeError(outOfBoundsMsg(index));
     }
 
-    [Inline]
     private final function rangeCheckForAdd(index:int):void {
         if (index > _size || index < 0)
             throw new RangeError(outOfBoundsMsg(index));
@@ -335,7 +329,6 @@ public class ArrayList extends AbstractList {
      * Of the many possible refactorings of the error handling code,
      * this "outlining" performs best with both server and client VMs.
      */
-    [Inline]
     private final function outOfBoundsMsg(index:int):String {
         return "Index: "+index+", Size: "+size;
     }

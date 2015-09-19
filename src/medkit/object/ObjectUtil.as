@@ -14,7 +14,6 @@ import medkit.collection.ArrayUtil;
 import medkit.object.error.CloneNotRegisteredError;
 
 public class ObjectUtil {
-    [Inline]
     public static function equals(o1:*, o2:*):Boolean {
         if(o1 === o2) {
             return true;
@@ -90,7 +89,6 @@ public class ObjectUtil {
         }
     }
 
-    [Inline]
     public static function compare(o1:*, o2:*):int {
         if(o1 is Comparable && o2 is Comparable) {
             var e1:Comparable = o1 as Comparable;
@@ -163,7 +161,6 @@ public class ObjectUtil {
         }
     }
 
-    [Inline]
     public static function hashCode(o:*):int {
         if(o is Hashable) {
             var h:Hashable = o as Hashable;
@@ -214,7 +211,6 @@ public class ObjectUtil {
         return memoryHash;
     }
 
-    [Inline]
     public static function clone(o:*, context:CloningContext):* {
         if(o == null) {
             return null;
@@ -247,7 +243,6 @@ public class ObjectUtil {
         }
     }
 
-    [Inline]
     private static function cloneArray(array:Array, context:CloningContext):Array {
         var arrayCopy:Array = null;
 
@@ -291,7 +286,6 @@ public class ObjectUtil {
         return arrayCopy;
     }
 
-    [Inline]
     private static function cloneCloneable(cloneable:Cloneable, context:CloningContext):Cloneable {
         // shallow clone
         if(context == null)
@@ -344,14 +338,12 @@ public class ObjectUtil {
         return clone;
     }
 
-    [Inline]
     public static function getClass(o:*):Class {
         var clazz:Class = Object(o).constructor;
 
         return clazz;
     }
 
-    [Inline]
     public static function getFullClassName(className:String):String {
         if(className.lastIndexOf("::") > 0)
             return className;
