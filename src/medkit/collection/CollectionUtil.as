@@ -6,6 +6,7 @@
 
 package medkit.collection {
 
+import medkit.collection.ArrayList;
 import medkit.collection.iterator.Iterator;
 import medkit.collection.iterator.ListIterator;
 import medkit.object.Comparable;
@@ -193,6 +194,65 @@ public class CollectionUtil {
 
     public static function swap(l:List, i:int, j:int):void {
         l.set(i, l.set(j, l.get(i)));
+    }
+
+    public static function findObjectOfClass(clazz:Class, collection:Collection):* {
+        if(collection is ArrayList) {
+            var list:ArrayList = ArrayList(collection);
+
+            var count:int = list.size();
+            for(var i:int = 0; i < count; ++i) {
+                var lo:* = list.get(i);
+
+                if(lo is clazz == false)
+                    continue;
+
+                return lo;
+            }
+        }
+        else {
+            var it:Iterator = collection.iterator();
+            while(it.hasNext()) {
+                var co:* = it.next();
+
+                if(co is clazz == false)
+                    continue;
+
+                return co;
+
+            }
+        }
+    }
+
+    public static function findAllObjectsOfClass(clazz:Class, collection:Collection, result:List = null):List {
+        if(result == null) result = new ArrayList();
+
+        if(collection is ArrayList) {
+            var list:ArrayList = ArrayList(collection);
+
+            var count:int = list.size();
+            for(var i:int = 0; i < count; ++i) {
+                var lo:* = list.get(i);
+
+                if(lo is clazz == false)
+                    continue;
+
+                result.add(lo);
+            }
+        }
+        else {
+            var it:Iterator = collection.iterator();
+            while(it.hasNext()) {
+                var co:* = it.next();
+
+                if(co is clazz == false)
+                    continue;
+
+                result.add(co);
+            }
+        }
+
+        return result;
     }
 }
 }
