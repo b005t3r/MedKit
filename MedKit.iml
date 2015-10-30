@@ -13,7 +13,6 @@
         </dependencies>
         <compiler-options>
           <map>
-            <entry key="compiler.debug.swc" value="true" />
             <entry key="compiler.keep-as3-metadata" value="Order&#10;ShallowClone&#10;NullClone" />
           </map>
           <option name="additionalOptions" value="-inline" />
