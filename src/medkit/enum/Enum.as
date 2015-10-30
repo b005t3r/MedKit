@@ -97,7 +97,7 @@ public class Enum implements Equalable, Comparable, Hashable, Cloneable {
             else if(order == null)
                 allConstants.push(constant);
             else
-                throw new UninitializedError(OrderMetadataName + "metadata does not contain all constants declared in " + className);
+                throw new UninitializedError(OrderMetadataName + " metadata does not contain all constants declared in " + className);
         }
 
         if(allConstants.length == 0)
