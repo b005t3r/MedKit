@@ -256,7 +256,9 @@ public class ArrayList extends AbstractList {
         return new ArrayListListItr(this, index);
     }
 
-    override internal function removeRange(fromIndex:int, toIndex:int):void {
+    override public function removeRange(fromIndex:int, toIndex:int):void {
+        subListRangeCheck(fromIndex, toIndex, size());
+
         modCount++;
         var numMoved:int = _size - toIndex;
 
@@ -267,16 +269,6 @@ public class ArrayList extends AbstractList {
 
         while (_size != newSize)
             elementData[--_size] = null;
-    }
-
-    internal final function subListRangeCheck(fromIndex:int, toIndex:int, size:int):void {
-        if (fromIndex < 0)
-            throw new RangeError("fromIndex = " + fromIndex);
-
-        if (toIndex > size)
-            throw new RangeError("toIndex = " + toIndex);
-        if (fromIndex > toIndex)
-            throw new RangeError("fromIndex(" + fromIndex + ") > toIndex(" + toIndex + ")");
     }
 
     private final function batchRemove(c:Collection, complement:Boolean):Boolean {

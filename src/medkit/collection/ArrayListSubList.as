@@ -68,7 +68,8 @@ public class ArrayListSubList extends AbstractList {
         return result;
     }
 
-    override internal function removeRange(fromIndex:int, toIndex:int):void {
+    override public function removeRange(fromIndex:int, toIndex:int):void {
+        list.subListRangeCheck(fromIndex, toIndex, size());
         checkForCoModification();
 
         parent.removeRange(parentOffset + fromIndex, parentOffset + toIndex);
