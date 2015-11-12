@@ -58,6 +58,11 @@ public class LinkedListTest extends ListTest {
     }
 
     [Test]
+    override public function testRemoveRange():void {
+        super.testRemoveRange();
+    }
+
+    [Test]
     override public function testIndexOf():void {
         super.testIndexOf();
     }

@@ -177,6 +177,35 @@ public class ListTest extends CollectionTest {
     }
 
     [Test]
+    public function testRemoveRange():void {
+        list.add("123");
+        list.add("321");
+        list.add("abc");
+        list.add("cba");
+
+        assertEquals(list.size(), 7);
+        assertEquals(list.indexOf(valueFirst), 0);
+        assertEquals(list.indexOf(valueSecond), 1);
+        assertEquals(list.indexOf(valueThird), 2);
+        assertEquals(list.indexOf("123"), 3);
+        assertEquals(list.indexOf("321"), 4);
+        assertEquals(list.indexOf("abc"), 5);
+        assertEquals(list.indexOf("cba"), 6);
+
+        list.removeRange(2, 5);
+
+        assertEquals(list.size(), 4);
+        assertEquals(list.indexOf(valueFirst), 0);
+        assertEquals(list.indexOf(valueSecond), 1);
+        assertEquals(list.indexOf("abc"), 2);
+        assertEquals(list.indexOf("cba"), 3);
+
+        list.removeRange(0, 4);
+
+        assertEquals(list.size(), 0);
+    }
+
+    [Test]
     public function testSubList():void {
         var sublist:List = list.subList(1, 3);
 

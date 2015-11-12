@@ -63,6 +63,11 @@ public class ArrayListTest extends ListTest {
     }
 
     [Test]
+    override public function testRemoveRange():void {
+        super.testRemoveRange();
+    }
+
+    [Test]
     override public function testSubList():void {
         super.testSubList();
     }
