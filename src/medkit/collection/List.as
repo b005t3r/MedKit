@@ -89,6 +89,13 @@ public interface List extends Collection {
      * @returns a view of the specified range within this list
      */
     function subList(fromIndex:int, toIndex:int):List;
-}
 
+    /**
+     * Removes the portion of this list between the specified fromIndex, inclusive, and toIndex, exclusive.
+     *
+     * @param fromIndex first index to remove
+     * @param toIndex first index not to be removed (toIndex-1 is the last one removed)
+     */
+    function removeRange(fromIndex:int, toIndex:int):void;
+}
 }

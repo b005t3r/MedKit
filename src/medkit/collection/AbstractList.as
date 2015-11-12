@@ -46,7 +46,7 @@ public class AbstractList extends AbstractCollection implements List, Hashable {
     }
 
     override public function clear():void {
-        removeRange(0, size());
+        removeRangeInternal(0, size());
     }
 
     public function addAllAt(index:int, c:Collection):Boolean {
@@ -148,7 +148,11 @@ public class AbstractList extends AbstractCollection implements List, Hashable {
     }
 
     public function removeRange(fromIndex:int, toIndex:int):void {
-        subListRangeCheck(fromIndex, toIndex, size())
+        rangeCheckInternal(fromIndex, toIndex, size());
+        removeRangeInternal(fromIndex, toIndex);
+    }
+
+    internal function removeRangeInternal(fromIndex:int, toIndex:int):void {
         var it:ListIterator = listIterator(fromIndex);
 
         for (var i:int = 0, n:int = toIndex - fromIndex; i < n; i++) {
@@ -157,19 +161,14 @@ public class AbstractList extends AbstractCollection implements List, Hashable {
         }
     }
 
-    internal function removeRangeInternal(fromIndex:int, toIndex:int):void {
-        removeRange(fromIndex, toIndex);
-    }
-
     private final function rangeCheckForAdd(index:int):void {
         if(index < 0 || index > size())
             throw new RangeError(outOfBoundsMsg(index));
     }
 
-    internal final function subListRangeCheck(fromIndex:int, toIndex:int, size:int):void {
+    internal final function rangeCheckInternal(fromIndex:int, toIndex:int, size:int):void {
         if (fromIndex < 0)
             throw new RangeError("fromIndex = " + fromIndex);
-
         if (toIndex > size)
             throw new RangeError("toIndex = " + toIndex);
         if (fromIndex > toIndex)

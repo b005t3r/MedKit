@@ -256,9 +256,7 @@ public class ArrayList extends AbstractList {
         return new ArrayListListItr(this, index);
     }
 
-    override public function removeRange(fromIndex:int, toIndex:int):void {
-        subListRangeCheck(fromIndex, toIndex, size());
-
+    override internal function removeRangeInternal(fromIndex:int, toIndex:int):void {
         modCount++;
         var numMoved:int = _size - toIndex;
 

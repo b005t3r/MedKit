@@ -96,7 +96,7 @@ internal class SubList extends AbstractList {
         return new SubListIterator(this, index);
     }
 
-    override public function removeRange(fromIndex:int, toIndex:int):void {
+    override internal function removeRangeInternal(fromIndex:int, toIndex:int):void {
         checkForConcurrentModification();
         l.removeRangeInternal(fromIndex + offset, toIndex + offset);
         this.modCount = l.modCount;

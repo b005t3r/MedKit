@@ -199,6 +199,23 @@ public class ListTest extends CollectionTest {
         assertTrue(ObjectUtil.equals(list.get(2), "321"));
         assertTrue(ObjectUtil.equals(list.get(3), valueThird));
         assertTrue(ObjectUtil.equals(list.get(4), "123"));
+
+        sublist.removeRange(1, 3);
+
+        assertEquals(sublist.size(), 2);
+        assertTrue(ObjectUtil.equals(sublist.get(0), valueSecond));
+        assertTrue(ObjectUtil.equals(sublist.get(1), "123"));
+
+        assertEquals(list.size(), 3);
+        assertTrue(ObjectUtil.equals(list.get(0), valueFirst));
+        assertTrue(ObjectUtil.equals(list.get(1), valueSecond));
+        assertTrue(ObjectUtil.equals(list.get(2), "123"));
+
+        sublist.clear();
+        assertEquals(sublist.size(), 0);
+
+        assertEquals(list.size(), 1);
+        assertTrue(ObjectUtil.equals(list.get(0), valueFirst));
     }
 
     [Test]

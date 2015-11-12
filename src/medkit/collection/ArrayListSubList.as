@@ -68,10 +68,10 @@ public class ArrayListSubList extends AbstractList {
         return result;
     }
 
-    override public function removeRange(fromIndex:int, toIndex:int):void {
+    override internal function removeRangeInternal(fromIndex:int, toIndex:int):void {
         checkForCoModification();
 
-        parent.removeRange(parentOffset + fromIndex, parentOffset + toIndex);
+        parent.removeRangeInternal(parentOffset + fromIndex, parentOffset + toIndex);
         this.modCount = parent.modCount;
         _size -= toIndex - fromIndex;
     }
@@ -106,7 +106,7 @@ public class ArrayListSubList extends AbstractList {
     }
 
     override public function subList(fromIndex:int, toIndex:int):List {
-        list.subListRangeCheck(fromIndex, toIndex, _size);
+        list.rangeCheckInternal(fromIndex, toIndex, _size);
 
         return new ArrayListSubList(list, this, offset, fromIndex, toIndex);
     }
