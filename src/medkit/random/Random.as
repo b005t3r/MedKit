@@ -12,8 +12,7 @@ package medkit.random {
  * http://www.johndcook.com
  */
 public class Random {
-    private var _w:uint;
-    private var _z:uint;
+    private var _seed:uint;
 
     public static function fromDate(date:Date = null):Random {
         if(date == null)
@@ -22,47 +21,40 @@ public class Random {
         var x:Number = date.getTime();
 
         var w:uint = (uint)(x / (1 << 16));
-        var z:uint = (uint)(x % (1 << 16));
 
-        return new Random(w, z);
+        return new Random(w);
     }
 
     public static function fromExisting(random:Random):Random {
-        return new Random(random.w, random.z);
+        return new Random(random.seed);
     }
 
     public static function fromSerialized(obj:Object):Random {
-        return new Random(obj["w"], obj["z"]);
+        return new Random(obj["seed"]);
     }
 
     public static function toSerialized(random:Random):Object {
-        return { "w" : random.w, "z" : random.z };
+        return { "seed" : random.seed };
     }
 
-    /** These values are not magical, just the default values Marsaglia used. Any pair of unsigned integers should be fine. */
-    public function Random(u:uint = 521288629, v:uint = 362436069) {
-        if(u == 0 || v == 0)
-            throw new ArgumentError("seeds must be greater than 0");
+    /** Any unsigned integer greater than zero should be fine. */
+    public function Random(seed:uint = 1) {
+        if(seed == 0)
+            throw new ArgumentError("seed must be greater than 0");
 
-        _w = u;
-        _z = v;
+        _seed = wangHash(seed);
     }
 
-    public function get w():uint { return _w; }
-    public function set w(value:uint):void { _w = value; }
+    public function get seed():uint { return _seed; }
+    public function set seed(value:uint):void { _seed = value; }
 
-    public function get z():uint { return _z; }
-    public function set z(value:uint):void { _z = value; }
-
-    /**
-     * This is the heart of the generator. It uses George Marsaglia's MWC algorithm to produce an unsigned integer.
-     * See http://www.bobwheeler.com/statistics/Password/MarsagliaPost.txt
-     */
+    /** Heart of the generator - a simple XorShift. */
     public function nextUnsignedInteger():uint {
-        _z = 36969 * (_z & 65535) + (_z >> 16);
-        _w = 18000 * (_w & 65535) + (_w >> 16);
+        _seed ^= (_seed << 13);
+        _seed ^= (_seed >> 17);
+        _seed ^= (_seed << 5);
 
-        return (_z << 16) + _w;
+        return _seed;
     }
 
     /** Produce a uniform random sample from the open interval (0, 1). The method will not return either end point. */
@@ -197,6 +189,16 @@ public class Random {
         var u:Number = nextGamma(a, 1.0);
         var v:Number = nextGamma(b, 1.0);
         return u / (u + v);
+    }
+
+    private function wangHash(seed:uint):uint {
+        seed = (seed ^ 61) ^ (seed >> 16);
+        seed *= 9;
+        seed = seed ^ (seed >> 4);
+        seed *= 0x27d4eb2d;
+        seed = seed ^ (seed >> 15);
+
+        return seed;
     }
 }
 }
