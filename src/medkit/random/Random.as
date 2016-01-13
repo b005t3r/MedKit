@@ -66,6 +66,18 @@ public class Random {
         return (u + 1.0) * 2.328306435454494e-10;
     }
 
+    public function nextNumberInRange(min:Number, max:Number):Number {
+        if(min > max) {
+            var tmp:Number = min;
+            min = max;
+            max = tmp;
+        } 
+
+        var n:Number = nextNumber();
+
+        return min + n * (max - min);
+    }
+
     /** Get normal (Gaussian) random sample with specified mean and standard deviation. */
     public function nextNormal(mean:Number = 0, standardDeviation:Number = 1):Number {
         if(standardDeviation <= 0.0)
