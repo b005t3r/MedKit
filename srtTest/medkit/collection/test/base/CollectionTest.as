@@ -137,6 +137,7 @@ public class CollectionTest {
         assertTrue(it.hasNext());
         var obj1:* = it.next();
         assertTrue(ObjectUtil.equals(valueFirst, obj1) || ObjectUtil.equals(valueSecond, obj1) || ObjectUtil.equals(valueThird, obj1));
+        it.remove();
 
         assertTrue(it.hasNext());
         var obj2:* = it.next();
@@ -144,6 +145,7 @@ public class CollectionTest {
             ! ObjectUtil.equals(obj1, obj2) &&
             (ObjectUtil.equals(valueFirst, obj2) || ObjectUtil.equals(valueSecond, obj2) || ObjectUtil.equals(valueThird, obj2))
         );
+        it.remove();
 
         assertTrue(it.hasNext());
         var obj3:* = it.next();
@@ -151,6 +153,7 @@ public class CollectionTest {
             ! ObjectUtil.equals(obj3, obj2) && ! ObjectUtil.equals(obj3, obj1) &&
             (ObjectUtil.equals(valueFirst, obj3) || ObjectUtil.equals(valueSecond, obj3) || ObjectUtil.equals(valueThird, obj3))
         );
+        it.remove();
 
         assertFalse(it.hasNext());
     }
