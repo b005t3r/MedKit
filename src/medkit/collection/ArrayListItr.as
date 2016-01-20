@@ -49,7 +49,7 @@ public class ArrayListItr implements Iterator {
         checkForCoModification();
 
         try {
-            list.remove(lastRet);
+            list.removeAt(lastRet);
             cursor              = lastRet;
             lastRet             = -1;
             expectedModCount    = list.modCount;
