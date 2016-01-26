@@ -57,6 +57,20 @@ public class Random {
         return _seed;
     }
 
+    public function nextIntegerInRange(min:int, max:int):int {
+        if(min > max) {
+            var tmp:int = min;
+            min = max;
+            max = tmp;
+        }
+
+        ++max;
+
+        var n:int = nextUnsignedInteger();
+
+        return min + (n % (max - min));
+    }
+
     /** Produce a uniform random sample from the open interval (0, 1). The method will not return either end point. */
     public function nextNumber():Number {
         // 0 <= u < 2^32
