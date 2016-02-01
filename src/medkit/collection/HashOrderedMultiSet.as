@@ -216,8 +216,16 @@ public class HashOrderedMultiSet implements OrderedMultiSet {
         return _list.indexOf(o);
     }
 
+    public function indexOfClass(c:Class):int {
+        return _list.indexOfClass(c);
+    }
+
     public function lastIndexOf(o:*):int {
         return _list.lastIndexOf(o);
+    }
+
+    public function lastIndexOfClass(c:Class):int {
+        return _list.lastIndexOfClass(c);
     }
 
     public function listIterator(index:int = 0):ListIterator {
