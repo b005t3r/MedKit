@@ -77,6 +77,17 @@ public class AbstractList extends AbstractCollection implements List, Hashable {
         return -1;
     }
 
+    public function indexOfClass(c:Class):int {
+        if(c == null)
+            throw new ArgumentError("c must not be null");
+
+        var e:ListIterator = listIterator();
+        while(e.hasNext())
+            if(ObjectUtil.getClass(e.next()) == c)
+                return e.previousIndex();
+        return -1;
+    }
+
     public function lastIndexOf(o:*):int {
         var e:ListIterator = listIterator(size());
 
@@ -90,6 +101,19 @@ public class AbstractList extends AbstractCollection implements List, Hashable {
                 if(o.equals(e.previous()))
                     return e.nextIndex();
         }
+
+        return -1;
+    }
+
+    public function lastIndexOfClass(c:Class):int {
+        if(c == null)
+            throw new ArgumentError("c must not be null");
+
+        var e:ListIterator = listIterator(size());
+
+        while(e.hasPrevious())
+            if(ObjectUtil.getClass(e.next()) == c)
+                return e.nextIndex();
 
         return -1;
     }

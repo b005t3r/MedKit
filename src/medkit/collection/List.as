@@ -47,6 +47,15 @@ public interface List extends Collection {
     function indexOf(o:*):int;
 
     /**
+     * Returns the index in this list of the first occurrence of the specified element of a given class, or -1 if this list
+     * does not contain this element.
+     *
+     * @param c class
+     * @return index
+     */
+    function indexOfClass(c:Class):int;
+
+    /**
      * Returns the index in this list of the last occurrence of the specified element, or -1 if this list
      * does not contain this element.
      *
@@ -54,6 +63,15 @@ public interface List extends Collection {
      * @return index
      */
     function lastIndexOf(o:*):int;
+
+    /**
+     * Returns the index in this list of the last occurrence of the specified element of a given class, or -1 if this list
+     * does not contain this element.
+     *
+     * @param c class
+     * @return index
+     */
+    function lastIndexOfClass(c:Class):int;
 
     /**
      * Returns the ListIterator of this List, starting from given index (default 0).

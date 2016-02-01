@@ -9,8 +9,10 @@ import medkit.collection.iterator.Iterator;
 import medkit.collection.iterator.ListIterator;
 import medkit.object.Cloneable;
 import medkit.object.CloningContext;
+import medkit.object.Equalable;
 import medkit.object.ObjectInputStream;
 import medkit.object.ObjectOutputStream;
+import medkit.object.ObjectUtil;
 import medkit.object.ObjectUtil;
 
 public class ArrayList extends AbstractList {
@@ -78,6 +80,17 @@ public class ArrayList extends AbstractList {
         return -1;
     }
 
+    override public function indexOfClass(c:Class):int {
+        if(c == null)
+            throw new ArgumentError("c must not be null");
+
+        for (var j:int = 0; j < _size; ++j)
+            if (ObjectUtil.getClass(elementData[j]) == c)
+                return j;
+
+        return -1;
+    }
+
     override public function lastIndexOf(o:*):int {
         if (o == null) {
             for (var i:int = _size - 1; i >= 0; --i)
@@ -89,6 +102,17 @@ public class ArrayList extends AbstractList {
                 if (ObjectUtil.equals(o, elementData[j]))
                     return j;
         }
+
+        return -1;
+    }
+
+    override public function lastIndexOfClass(c:Class):int {
+        if(c == null)
+            throw new ArgumentError("c must not be null");
+
+        for (var j:int = _size - 1; j >= 0; --j)
+            if (ObjectUtil.getClass(elementData[j]) == c)
+                return j;
 
         return -1;
     }
@@ -321,6 +345,29 @@ public class ArrayList extends AbstractList {
      */
     private final function outOfBoundsMsg(index:int):String {
         return "Index: "+index+", Size: "+size;
+    }
+
+    override public function equals(o:Equalable):Boolean {
+        var c:Collection = o as Collection;
+
+        if(c == null)
+            return false;
+
+        if(c.size() != _size)
+            return false;
+
+        var al:ArrayList = c as ArrayList;
+
+        if(al == null) {
+            return super.equals(o);
+        }
+        else {
+            for(var i:int = 0; i < _size; ++i)
+                if(ObjectUtil.equals(al.get(i), get(i)) == false)
+                    return false;
+
+            return true;
+        }
     }
 }
 
