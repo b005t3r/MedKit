@@ -20,9 +20,7 @@ public class Random {
 
         var x:Number = date.getTime();
 
-        var w:uint = (uint)(x / (1 << 16));
-
-        return new Random(w);
+        return new Random(x);
     }
 
     public static function fromExisting(random:Random):Random {
