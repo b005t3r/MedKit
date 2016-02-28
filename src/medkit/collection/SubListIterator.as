@@ -14,7 +14,7 @@ internal class SubListIterator implements ListIterator {
 
     public function SubListIterator(list:SubList, index:int) {
         this.list   = list;
-        this.i      = list.listIterator(list.offset + index);
+        this.i      = list.l.listIterator(list.offset + index);
     }
 
     public function hasNext():Boolean {
