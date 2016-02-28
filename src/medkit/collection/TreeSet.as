@@ -10,6 +10,8 @@ import medkit.collection.iterator.Iterator;
 import medkit.object.Cloneable;
 import medkit.object.CloningContext;
 import medkit.object.Comparator;
+import medkit.object.ObjectInputStream;
+import medkit.object.ObjectOutputStream;
 import medkit.object.ObjectUtil;
 
 public class TreeSet extends AbstractSet implements NavigableSet, Cloneable {
@@ -174,6 +176,24 @@ public class TreeSet extends AbstractSet implements NavigableSet, Cloneable {
 
         return clone;
     }
-}
 
+    override public function readObject(input:ObjectInputStream):void {
+        var size:int = input.readInt("size");
+
+        for(var i:int = 0; i < size; ++i)
+            add(input.readObject(String(i)));
+    }
+
+    override public function writeObject(output:ObjectOutputStream):void {
+        output.writeInt(size(), "size");
+
+        var i:int = 0, it:Iterator = this.iterator();
+        while(it.hasNext()) {
+            var e:* = it.next();
+
+            output.writeObject(e, String(i));
+            ++i;
+        }
+    }
+}
 }
