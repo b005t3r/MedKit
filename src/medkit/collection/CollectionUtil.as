@@ -257,57 +257,5 @@ public class CollectionUtil {
 
         return result;
     }
-
-    public static function vectorToArrayList(inVec:*, result:ArrayList = null, isMultiDim:Boolean = false):ArrayList {
-        var inVector:Vector.<*> = Vector.<*>(inVec);
-
-        if(result == null) result = new ArrayList(inVector.length);
-
-        var currentElement:*;
-        var elementVector:Vector.<*>;
-        var elementArrayList:ArrayList = null;
-        for (var currentIndex:int = 0; currentIndex < inVector.length; ++currentIndex)
-        {
-            currentElement = inVector[currentIndex]
-            if (isMultiDim)
-            {
-                elementVector = Vector.<*>(currentElement)
-                elementArrayList = vectorToArrayList(elementVector, elementArrayList);
-                result.add(elementArrayList);
-            }
-            else
-            {
-                result.add(currentElement);
-            }
-        }
-
-        return result;
-    }
-
-    public static function arrayListToVector(inArrayList:ArrayList, result:*, isMultiDim:Boolean = false):void {
-        if(result == null)
-            throw new IllegalOperationError("Result vector has to defined.");
-
-        var outVector:Vector.<*> = Vector.<*>(result);
-        if(outVector == null)
-            throw new IllegalOperationError("Result has to be a vector class.");
-
-        if(inArrayList.size() > outVector.length)
-            throw new IllegalOperationError("Result vector's length has to fit.");
-
-        var currentElement:*;
-        var elementVector:Vector.<*>;
-        for (var currentIndex:int = 0; currentIndex < inArrayList.size(); ++currentIndex)
-        {
-            currentElement = inArrayList.get(currentIndex);
-            if (isMultiDim)
-            {
-                elementVector = Vector.<*>(outVector[currentIndex])
-                arrayListToVector(currentElement, elementVector);
-            }
-
-            outVector[currentIndex] = currentElement;
-        }
-    }
 }
 }
