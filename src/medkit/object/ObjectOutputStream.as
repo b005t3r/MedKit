@@ -127,6 +127,8 @@ public class ObjectOutputStream {
             if(value is Array) {
                 var arr:Array = value as Array;
 
+                _context.members["arrLength"] = arr.length;
+
                 var count:int = arr.length;
                 for(var i:int = 0; i < count; ++i) {
                     var arrElem:*       = arr[i];

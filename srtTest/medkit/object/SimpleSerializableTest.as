@@ -146,7 +146,7 @@ public class SimpleSerializableTest {
         output.writeNumber(b, "b");
 
         assertTrue(null != output.jsonData.globalKeys["b"]);
-        assertTrue(output.jsonData.globalKeys["b"] != output.jsonData.globalKeys["b"]); // isNaN
+        assertTrue(output.jsonData.globalKeys["b"].thisIsNaN); // isNaN
         assertEquals(0, output.jsonData.serializedObjects.length);
 
         var z:Number = input.readNumber("b");

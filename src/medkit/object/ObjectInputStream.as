@@ -135,10 +135,16 @@ public class ObjectInputStream {
         var retVal:Object;
 
         if(clazz == Array) {
-            var arr:Array = [];
+            var arrLength:int = _context.members["arrLength"];
+
+            var arr:Array = new Array(arrLength);
+
             _loadedObjectsByIndex[index] = arr;
 
             for (var arrKey:String in _context.members) {
+                if(arrKey == "arrLength")
+                    continue;
+
                 if(isNaN(Number(arrKey)))
                     throw new Error("serialized Array member's key can not be converted to an index: " + arrKey);
 
