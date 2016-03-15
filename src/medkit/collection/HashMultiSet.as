@@ -172,7 +172,7 @@ public class HashMultiSet extends AbstractSet implements MultiSet {
             while(it.hasNext()) {
                 var entry:MapEntry = it.next();
 
-                if(ms.elementCount(entry.getKey) != entry.getValue())
+                if(ms.elementCount(entry.getKey()) != entry.getValue())
                     return false;
             }
 
