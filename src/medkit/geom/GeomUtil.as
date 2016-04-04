@@ -9,6 +9,7 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 
 import medkit.geom.shapes.Point2D;
+import medkit.geom.shapes.Rectangle2D;
 
 public class GeomUtil {
     public static function distanceBetweenPoints(x1:Number, y1:Number, x2:Number, y2:Number):Number {
@@ -241,5 +242,22 @@ public class GeomUtil {
         return resultPoint;
     }
 
+    public static function transformBounds2D(matrix:Matrix, x:Number, y:Number, w:Number, h:Number, resultRect:Rectangle2D):Rectangle2D {
+        if(resultRect == null) resultRect = new Rectangle2D();
+
+        var x1:Number = matrix.a * x + matrix.c * y + matrix.tx;
+        var y1:Number = matrix.d * y + matrix.b * x + matrix.ty;
+        var x2:Number = matrix.a * (x + w) + matrix.c * (y + h) + matrix.tx;
+        var y2:Number = matrix.d * (y + h) + matrix.b * (x + w) + matrix.ty;
+
+        resultRect.setTo(
+            x1 < x2 ? x1 : x2,
+            y1 < y2 ? y1 : y2,
+            Math.abs(x1 - x2),
+            Math.abs(y1 - y2)
+        );
+
+        return resultRect;
+    }
 }
 }
