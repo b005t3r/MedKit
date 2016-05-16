@@ -9,7 +9,7 @@
               <dependency linkage="Test" />
             </entry>
           </entries>
-          <sdk name="AIR SDK 17" />
+          <sdk name="AIR SDK" />
         </dependencies>
         <compiler-options>
           <map>
@@ -30,7 +30,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/srtTest" isTestSource="true" />
     </content>
-    <orderEntry type="jdk" jdkName="AIR SDK 17" jdkType="Flex SDK Type (new)" />
+    <orderEntry type="jdk" jdkName="AIR SDK" jdkType="Flex SDK Type (new)" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="flexunit-4.1.0-8-as3_4.1.0.16076" level="application" />
     <orderEntry type="module-library" exported="">
@@ -45,4 +45,3 @@
     </orderEntry>
   </component>
 </module>
-
