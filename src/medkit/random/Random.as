@@ -64,7 +64,7 @@ public class Random {
 
         ++max;
 
-        var n:int = nextUnsignedInteger();
+        var n:int = nextUnsignedInteger() & 0x7fffffff;
 
         return min + (n % (max - min));
     }
