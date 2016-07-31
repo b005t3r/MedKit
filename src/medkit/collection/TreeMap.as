@@ -10,6 +10,8 @@ import medkit.collection.iterator.Iterator;
 import medkit.object.Cloneable;
 import medkit.object.CloningContext;
 import medkit.object.Comparator;
+import medkit.object.ObjectInputStream;
+import medkit.object.ObjectOutputStream;
 import medkit.object.ObjectUtil;
 
 public class TreeMap extends AbstractMap implements NavigableMap {
@@ -28,6 +30,18 @@ public class TreeMap extends AbstractMap implements NavigableMap {
 
     public function TreeMap(comparator:Comparator = null) {
         this._comparator = comparator;
+    }
+
+    override public function readObject(input:ObjectInputStream):void {
+        _comparator = Comparator(input.readObject("comparator"));
+        root        = TreeMapEntry(input.readObject("root"));
+        _size       = input.readInt("size");
+    }
+
+    override public function writeObject(output:ObjectOutputStream):void {
+        output.writeObject(_comparator, "comparator");
+        output.writeObject(root, "root");
+        output.writeInt(_size, "size");
     }
 
     override public function size():int {
