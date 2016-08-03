@@ -46,6 +46,12 @@ public class ObjectInputStream {
         _jsonData = jsonData;
     }
 
+    public function hasKey(key:String):Boolean {
+        var obj:* = _context == null ? _jsonData.globalKeys[key] : _context.members[key];
+
+        return obj != null;
+    }
+
     public function readBoolean(key:String):Boolean {
         var retVal:* = readAny(key);
 
