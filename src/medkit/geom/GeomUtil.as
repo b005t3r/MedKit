@@ -242,7 +242,7 @@ public class GeomUtil {
         return resultPoint;
     }
 
-    public static function transformBounds2D(matrix:Matrix, x:Number, y:Number, w:Number, h:Number, resultRect:Rectangle2D):Rectangle2D {
+    public static function transformBounds2D(matrix:Matrix, x:Number, y:Number, w:Number, h:Number, resultRect:Rectangle2D = null):Rectangle2D {
         if(resultRect == null) resultRect = new Rectangle2D();
 
         var x1:Number = matrix.a * x + matrix.c * y + matrix.tx;
