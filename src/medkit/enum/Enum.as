@@ -18,9 +18,9 @@ import medkit.object.Hashable;
 import medkit.object.ObjectUtil;
 
 public class Enum implements Equalable, Comparable, Hashable, Cloneable {
-    private static const OrderMetadataName:String = "Order";
+    protected static const OrderMetadataName:String = "Order";
 
-    private static var allConstantByClass:Object = {};
+    protected static var allConstantByClass:Object = {};
 
     private var value:String;
 
