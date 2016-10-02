@@ -5,7 +5,7 @@
  */
 package medkit.locale {
 public class SomeLocale extends Locale {
-    { initLocales(SomeLocale); }
+    { initLocaleBundle(SomeLocale); }
 
     public static const SomeTextOne:SomeLocale      = new SomeLocale("This is some text");
     public static const SomeTextTwo:SomeLocale      = new SomeLocale("And this is some more text");
