@@ -210,7 +210,7 @@ public class AbstractCollection implements Collection {
         while(true) {
             var e:* = i.next();
 
-            sb.append(e === this ? "(this Collection)" : e);
+            sb.append(e === this ? "(this Collection)" : e != null ? e : "null");
 
             if (! i.hasNext())
                 break;
