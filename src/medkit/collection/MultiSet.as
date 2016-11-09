@@ -4,6 +4,8 @@
  * Time: 20:38
  */
 package medkit.collection {
+import medkit.collection.iterator.Iterator;
+
 public interface MultiSet extends Set {
     /**
      * Ensures this set contains at least as many copies of the given element.
@@ -39,5 +41,12 @@ public interface MultiSet extends Set {
      * @return number of copies of the specified element or zero if there are none present
      */
     function elementCount(o:*):int
+
+    /**
+     * Returns an iterator over the MapEntries in this collection, key contains the object, value contains the count.
+     *
+     * @returns Iterator
+     */
+    function countedIterator():Iterator
 }
 }

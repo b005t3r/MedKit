@@ -70,6 +70,10 @@ public class HashOrderedMultiSet implements OrderedMultiSet {
         return _list.iterator();
     }
 
+    public function countedIterator():Iterator {
+        return _set.countedIterator();
+    }
+
     public function remove(o:*):Boolean {
         if(_set.elementCount(o) == 1)
             _list.remove(o);

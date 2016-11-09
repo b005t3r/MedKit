@@ -87,6 +87,10 @@ public class HashMultiSet extends AbstractSet implements MultiSet {
         return map.keySet().iterator();
     }
 
+    public function countedIterator():Iterator {
+        return map.entrySet().iterator();
+    }
+
     override public function size():int {
         return map.size();
     }
