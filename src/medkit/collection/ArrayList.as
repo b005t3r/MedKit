@@ -85,7 +85,7 @@ public class ArrayList extends AbstractList {
             throw new ArgumentError("c must not be null");
 
         for (var j:int = 0; j < _size; ++j)
-            if (ObjectUtil.getClass(elementData[j]) == c)
+            if (elementData[j] is c)
                 return j;
 
         return -1;
@@ -111,7 +111,7 @@ public class ArrayList extends AbstractList {
             throw new ArgumentError("c must not be null");
 
         for (var j:int = _size - 1; j >= 0; --j)
-            if (ObjectUtil.getClass(elementData[j]) == c)
+            if (elementData[j] is c)
                 return j;
 
         return -1;
