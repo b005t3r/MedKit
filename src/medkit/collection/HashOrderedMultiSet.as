@@ -49,6 +49,19 @@ public class HashOrderedMultiSet implements OrderedMultiSet {
         return retVal;
     }
 
+    public function addArray(arr:Array):Boolean {
+        var changed:Boolean = false;
+
+        var count:int = arr.length;
+        for(var i:int = 0; i < count; ++i) {
+            var o:* = arr[i];
+
+            changed = add(o) || changed;
+        }
+
+        return changed;
+    }
+
     public function clear():void {
         _set.clear();
         _list.clear();

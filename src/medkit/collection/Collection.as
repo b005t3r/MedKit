@@ -33,6 +33,12 @@ public interface Collection extends Equalable, Hashable, Cloneable, Serializable
     function addAll(c:Collection):Boolean;
 
     /**
+     * Add elements of an Array to this collection.
+     * @return true if this collection changed as a result of the call
+     */
+    function addArray(arr:Array):Boolean
+
+    /**
      * Removes all of the elements from this collection (optional operation).
      */
     function clear():void;

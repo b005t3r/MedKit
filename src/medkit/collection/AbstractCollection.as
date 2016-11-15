@@ -85,6 +85,19 @@ public class AbstractCollection implements Collection {
         return modified;
     }
 
+    public function addArray(arr:Array):Boolean {
+        var changed:Boolean = false;
+
+        var count:int = arr.length;
+        for(var i:int = 0; i < count; ++i) {
+            var o:* = arr[i];
+
+            changed = add(o) || changed;
+        }
+
+        return changed;
+    }
+
     public function clear():void {
         var e:Iterator = iterator();
 
