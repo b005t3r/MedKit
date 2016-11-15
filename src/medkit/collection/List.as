@@ -9,6 +9,16 @@ import medkit.collection.iterator.ListIterator;
 
 public interface List extends Collection {
     /**
+     * @return first element on this list
+     */
+    function get first():*
+
+    /**
+     * @return last element on this list
+     */
+    function get last():*
+
+    /**
      * Ensures that this list contains the specified element at the specified index (optional operation).
      *
      * @param o element to insert
@@ -30,12 +40,34 @@ public interface List extends Collection {
     function addAllAt(index:int, c:Collection):Boolean;
 
     /**
+     * Converts an index to a reversed index, used for indexing this collection starting from the end.
+     * @param index to reverse
+     * @return reversed index
+     */
+    function indexToReversedIndex(index:int):int
+
+    /**
+     * Converts a reversed index to an index.
+     * @param reversedIndex to reverse back into an index
+     * @return index
+     */
+    function reversedIndexToIndex(reversedIndex:int):int
+
+    /**
      * Returns the element at the specified position in this collection.
      *
      * @param index of the element to retrieve
      * @returns element at the specified index
      */
     function get(index:int):*;
+
+    /**
+     * Returns the element at the specified position in this collection, counting from the end of this collection.
+     *
+     * @param index of the element to retrieve, counting from the end
+     * @returns element at the specified index, counting from the end
+     */
+    function getReversed(index:int):*;
 
     /**
      * Returns the index in this list of the first occurrence of the specified element, or -1 if this list

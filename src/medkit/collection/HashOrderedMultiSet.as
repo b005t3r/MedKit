@@ -329,5 +329,11 @@ public class HashOrderedMultiSet implements OrderedMultiSet {
         if (fromIndex > toIndex)
             throw new RangeError("fromIndex(" + fromIndex + ") > toIndex(" + toIndex + ")");
     }
+
+    public function get first():* { return _list.first; }
+    public function get last():* { return _list.last; }
+    public function indexToReversedIndex(index:int):int { return _list.indexToReversedIndex(index); }
+    public function reversedIndexToIndex(reversedIndex:int):int { return _list.reversedIndexToIndex(reversedIndex); }
+    public function getReversed(index:int):* { return _list.getReversed(index); }
 }
 }

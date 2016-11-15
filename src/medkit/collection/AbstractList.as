@@ -202,6 +202,12 @@ public class AbstractList extends AbstractCollection implements List, Hashable {
     private final function outOfBoundsMsg(index:int):String {
         return "Index: " + index + ", Size: " + size();
     }
-}
 
+    public function get first():* { return get(0); }
+    public function get last():* { return get(size() - 1); }
+
+    public function indexToReversedIndex(index:int):int { return size() - 1 - index; }
+    public function reversedIndexToIndex(reversedIndex:int):int { return size() - 1 - reversedIndex; }
+    public function getReversed(index:int):* { return get(size() - 1 - index); }
+}
 }
