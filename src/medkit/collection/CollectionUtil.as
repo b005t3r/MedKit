@@ -6,10 +6,6 @@
 
 package medkit.collection {
 
-import flash.errors.IllegalOperationError;
-
-import medkit.collection.ArrayList;
-import medkit.collection.ArrayList;
 import medkit.collection.iterator.Iterator;
 import medkit.collection.iterator.ListIterator;
 import medkit.object.Comparable;

@@ -7,18 +7,14 @@ package medkit.collection.test {
 import flash.geom.Rectangle;
 
 import medkit.collection.ArrayList;
-
 import medkit.collection.Collection;
 import medkit.collection.iterator.Iterator;
-
-import medkit.collection.test.base.SetTest;
 import medkit.collection.spatial.SpatialSet;
+import medkit.collection.test.base.SetTest;
 import medkit.object.ObjectUtil;
 
 import org.flexunit.asserts.assertEquals;
-
 import org.flexunit.asserts.assertFalse;
-
 import org.flexunit.asserts.assertTrue;
 
 public class SpatialSetTest extends SetTest {

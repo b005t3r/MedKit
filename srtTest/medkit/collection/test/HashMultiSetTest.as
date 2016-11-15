@@ -5,12 +5,7 @@
  */
 package medkit.collection.test {
 import medkit.collection.HashMultiSet;
-import medkit.collection.TestSubject;
 import medkit.collection.test.base.MultiSetTest;
-
-import org.flexunit.asserts.assertEquals;
-import org.flexunit.asserts.assertFalse;
-import org.flexunit.asserts.assertTrue;
 
 public class HashMultiSetTest extends MultiSetTest {
     [Before]

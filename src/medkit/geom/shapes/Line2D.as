@@ -7,7 +7,6 @@ package medkit.geom.shapes {
 import flash.geom.Matrix;
 
 import medkit.collection.spatial.Spatial;
-import medkit.geom.GeomUtil;
 import medkit.object.Cloneable;
 import medkit.object.CloningContext;
 import medkit.object.Equalable;
@@ -407,9 +406,7 @@ public class Line2D implements Spatial, Shape2D, Equalable, Hashable, Cloneable 
 import flash.geom.Matrix;
 
 import medkit.geom.GeomUtil;
-
 import medkit.geom.shapes.Line2D;
-
 import medkit.geom.shapes.PathIterator;
 import medkit.geom.shapes.Point2D;
 import medkit.geom.shapes.enum.SegmentType;

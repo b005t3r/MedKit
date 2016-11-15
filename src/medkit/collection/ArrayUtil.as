@@ -5,7 +5,6 @@
  */
 
 package medkit.collection {
-import medkit.collection.iterator.ListIterator;
 import medkit.random.Random;
 
 public class ArrayUtil {

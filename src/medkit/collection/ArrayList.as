@@ -13,7 +13,6 @@ import medkit.object.Equalable;
 import medkit.object.ObjectInputStream;
 import medkit.object.ObjectOutputStream;
 import medkit.object.ObjectUtil;
-import medkit.object.ObjectUtil;
 
 public class ArrayList extends AbstractList {
     internal var elementData:Array;

@@ -7,7 +7,6 @@ package medkit.collection.spatial {
 import medkit.collection.AbstractSet;
 import medkit.collection.ArrayList;
 import medkit.collection.Collection;
-import medkit.collection.HashMap;
 import medkit.collection.HashSet;
 import medkit.collection.iterator.Iterator;
 import medkit.object.Cloneable;
