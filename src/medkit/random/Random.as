@@ -11,7 +11,7 @@ package medkit.random {
  * Ported from John D. Cook SimpleRNG
  * http://www.johndcook.com
  */
-public class Random {
+public class Random implements Randomizer {
     private var _seed:uint;
 
     public static function fromDate(date:Date = null):Random {
@@ -46,7 +46,6 @@ public class Random {
     public function get seed():uint { return _seed; }
     public function set seed(value:uint):void { _seed = value; }
 
-    /** Heart of the generator - a simple XorShift. */
     public function nextUnsignedInteger():uint {
         _seed ^= (_seed << 13);
         _seed ^= (_seed >> 17);
@@ -69,7 +68,6 @@ public class Random {
         return min + (n % (max - min));
     }
 
-    /** Produce a uniform random sample from the open interval (0, 1). The method will not return either end point. */
     public function nextNumber():Number {
         // 0 <= u < 2^32
         var u:uint = nextUnsignedInteger();
@@ -83,14 +81,13 @@ public class Random {
             var tmp:Number = min;
             min = max;
             max = tmp;
-        } 
+        }
 
         var n:Number = nextNumber();
 
         return min + n * (max - min);
     }
 
-    /** Get normal (Gaussian) random sample with specified mean and standard deviation. */
     public function nextNormal(mean:Number = 0, standardDeviation:Number = 1):Number {
         if(standardDeviation <= 0.0)
             throw new ArgumentError("Shape must be positive. Received: " + standardDeviation);
@@ -106,7 +103,6 @@ public class Random {
         return mean + standardDeviation * retVal;
     }
 
-    /** Get exponential random sample with specified mean. */
     public function nextExponential(mean:Number = 1):Number {
         if(mean <= 0.0)
             throw new ArgumentError("Mean must be positive. Received: " + mean);
@@ -188,13 +184,12 @@ public class Random {
         return y1 / Math.sqrt(y2 / degreesOfFreedom);
     }
 
-    /** The Laplace distribution is also known as the double exponential distribution. */
     public function nextLaplace(mean:Number, scale:Number):Number {
         var u:Number = nextNumber();
 
         return (u < 0.5) ?
-            mean + scale * Math.log(2.0 * u) :
-            mean - scale * Math.log(2 * (1 - u));
+        mean + scale * Math.log(2.0 * u) :
+        mean - scale * Math.log(2 * (1 - u));
     }
 
     public function nextLogNormal(mu:Number, sigma:Number):Number {
