@@ -6,6 +6,7 @@
 
 package medkit.collection {
 import medkit.random.Random;
+import medkit.random.Randomizer;
 
 public class ArrayUtil {
     public static function copyOf(array:Array, capacity:int):Array {
@@ -65,7 +66,7 @@ public class ArrayUtil {
         return -1;
     }
 
-    public static function shuffle(arr:Array, rnd:Random = null):void {
+    public static function shuffle(arr:Array, rnd:Randomizer = null):void {
         if(rnd == null)
             rnd = Random.fromDate();
 

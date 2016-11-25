@@ -12,6 +12,7 @@ import medkit.object.Comparable;
 import medkit.object.Comparator;
 import medkit.object.ObjectUtil;
 import medkit.random.Random;
+import medkit.random.Randomizer;
 
 public class CollectionUtil {
     private static const SHUFFLE_THRESHOLD:int = 5;
@@ -168,7 +169,7 @@ public class CollectionUtil {
      * @throws UnsupportedOperationException if the specified list or its
      *         list-iterator does not support the <tt>set</tt> operation.
      */
-    public static function shuffle(list:List, rnd:Random = null):void {
+    public static function shuffle(list:List, rnd:Randomizer = null):void {
         if(rnd == null)
             rnd = Random.fromDate();
 
