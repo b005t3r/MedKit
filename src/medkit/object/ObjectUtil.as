@@ -183,6 +183,9 @@ public class ObjectUtil {
             return c;
         }
         else {
+            if(o == null)
+                return 0xFFFFFFFF;
+
             var str:String = memoryHashString(o);
 
             return hashCode(str);
