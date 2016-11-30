@@ -23,6 +23,7 @@ public class Enum implements Equalable, Comparable, Hashable, Cloneable {
     protected static var allConstantByClass:Object = {};
 
     private var value:String;
+    private var ind:int;
 
     public static function allEnums(clazz:Class):Array {
         var className:String    = getQualifiedClassName(clazz);
@@ -89,13 +90,13 @@ public class Enum implements Equalable, Comparable, Hashable, Cloneable {
 
             var index:int = order != null
                 ? order.indexOf(String(constantXML.@name))
-                : -1
+                : allConstants.length
             ;
 
-            if(index >= 0)
+            constant.ind = index;
+
+            if(index >= 0 || order == null)
                 allConstants[index] = constant;
-            else if(order == null)
-                allConstants.push(constant);
             else
                 throw new UninitializedError(OrderMetadataName + " metadata does not contain all constants declared in " + className);
         }
@@ -112,15 +113,8 @@ public class Enum implements Equalable, Comparable, Hashable, Cloneable {
         return Enum.allEnums(clazz);
     }
 
-    public function index():int {
-        var clazz:Class = ObjectUtil.getClass(this);
-
-        return Enum.allEnums(clazz).indexOf(this);
-    }
-
-    public function toString():String {
-        return value;
-    }
+    public function index():int { return ind; }
+    public function toString():String { return value; }
 
     public function equals(object:Equalable):Boolean {
         var clazz:Class = ObjectUtil.getClass(this);
@@ -128,9 +122,8 @@ public class Enum implements Equalable, Comparable, Hashable, Cloneable {
         if(! (object is clazz))
             return false;
 
-        var allConstants:Array  = Enum.allEnums(clazz);
-        var thisIndex:int       = allConstants.indexOf(this);
-        var objectIndex:int     = allConstants.indexOf(object);
+        var thisIndex:int       = this.ind;
+        var objectIndex:int     = Enum(object).ind;
 
         return thisIndex == objectIndex;
     }
@@ -141,20 +134,14 @@ public class Enum implements Equalable, Comparable, Hashable, Cloneable {
         if(! (object is clazz))
             throw new ArgumentError("object (" + object + ") is not of class " + clazz);
 
-        var allConstants:Array  = Enum.allEnums(clazz);
-        var thisIndex:int       = allConstants.indexOf(this);
-        var objectIndex:int     = allConstants.indexOf(object);
+        var thisIndex:int       = this.ind;
+        var objectIndex:int     = Enum(object).ind;
 
         return thisIndex - objectIndex;
     }
 
-    public function hashCode():int {
-        return ObjectUtil.hashCode(value);
-    }
-
-    public function clone(cloningContext:CloningContext = null):Cloneable {
-        return this;
-    }
+    public function hashCode():int { return int(value.charCodeAt(0)) ^ ind; }
+    public function clone(cloningContext:CloningContext = null):Cloneable { return this; }
 }
 
 }
