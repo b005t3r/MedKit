@@ -328,7 +328,7 @@ public class ArrayList extends AbstractList {
     }
 
     private final function rangeCheck(index:int):void {
-        if(index >= _size)
+        if(index >= _size || index < 0)
             throw new RangeError(outOfBoundsMsg(index));
     }
 
@@ -343,7 +343,7 @@ public class ArrayList extends AbstractList {
      * this "outlining" performs best with both server and client VMs.
      */
     private final function outOfBoundsMsg(index:int):String {
-        return "Index: "+index+", Size: "+size;
+        return "Index: "+index+", Size: "+ size();
     }
 
     override public function equals(o:Equalable):Boolean {
