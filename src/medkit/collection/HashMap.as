@@ -7,6 +7,7 @@
 package medkit.collection {
 
 import medkit.collection.iterator.Iterator;
+import medkit.enum.Enum;
 import medkit.object.Cloneable;
 import medkit.object.CloningContext;
 import medkit.object.ObjectInputStream;
@@ -251,12 +252,36 @@ public class HashMap extends AbstractMap {
     internal final function getEntry(key:*):HashMapEntry {
         var hash:int = (key == null) ? 0 : HashMap.hash(ObjectUtil.hashCode(key));
 
+/*
+        if(key is Enum) {
+            trace("getEntry(key:" + key + "): hash = " + hash);
+            trace("   - table = " + table);
+            trace("   - indexFor = " + HashMap.indexFor(hash, table.length));
+        }
+*/
+
         for (var e:HashMapEntry = table[HashMap.indexFor(hash, table.length)]; e != null; e = e.next) {
             var k:*;
 
-            if(e.hash == hash && ((k = e.key) == key || (key != null && ObjectUtil.equals(key, k))))
+/*
+            if(key is Enum)
+                trace("   - e.key:" + e.key + ", hash = " + e.hash + ", equals(key) = " + ObjectUtil.equals(key, e.key));
+*/
+
+            if(e.hash == hash && ((k = e.key) == key || (key != null && ObjectUtil.equals(key, k)))) {
+/*
+                if(key is Enum)
+                    trace("   - found!");
+*/
+
                 return e;
+            }
         }
+
+/*
+        if(key is Enum)
+            trace("   - not found");
+*/
 
         return null;
     }

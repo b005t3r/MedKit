@@ -98,7 +98,7 @@ public class HashMapEntry implements MapEntry {
     }
 
     public function toString():String {
-        return getKey() + "=" + getValue();
+        return "entry(hash:" + hash + "," + getKey() + "=" + getValue() + (next != null ? ") -> " + next : ")");
     }
 
     /**
