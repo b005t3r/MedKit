@@ -140,8 +140,7 @@ public class Enum implements Equalable, Comparable, Hashable, Cloneable {
         return thisIndex - objectIndex;
     }
 
-    public function hashCode():int { return int(value.charCodeAt(0)) ^ ind; }
+    public function hashCode():int { return value.charCodeAt(0); }
     public function clone(cloningContext:CloningContext = null):Cloneable { return this; }
 }
-
 }
