@@ -176,7 +176,7 @@ public class CollectionUtil {
         var i:int, size:int = list.size();
         if(size < SHUFFLE_THRESHOLD || list is ArrayList) {
             for(i = size; i > 1; --i)
-                swap(list, i - 1, rnd.nextUnsignedInteger() % i);
+                list.swap(i - 1, rnd.nextUnsignedInteger() % i);
         }
         else {
             var arr:Array = list.toArray();
@@ -192,6 +192,7 @@ public class CollectionUtil {
         }
     }
 
+    [Deprecated("Use List.swap() instead")]
     public static function swap(l:List, i:int, j:int):void {
         l.set(i, l.set(j, l.get(i)));
     }

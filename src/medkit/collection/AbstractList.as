@@ -45,6 +45,10 @@ public class AbstractList extends AbstractCollection implements List, Hashable {
         return true;
     }
 
+    public function swap(i:int, j:int):void {
+        set(i, set(j, get(i)));
+    }
+
     override public function clear():void {
         removeRangeInternal(0, size());
     }

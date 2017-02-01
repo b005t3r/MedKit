@@ -260,6 +260,10 @@ public class HashOrderedMultiSet implements OrderedMultiSet {
         throw new Error("operation not supported");
     }
 
+    public function swap(i:int, j:int):void {
+        throw new Error("operation not supported");
+    }
+
     public function subList(fromIndex:int, toIndex:int):List {
         throw new Error("operation not supported");
     }

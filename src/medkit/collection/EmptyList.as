@@ -56,6 +56,7 @@ public class EmptyList extends Enum implements List {
     public function getReversed(index:int):* { return throwEmptyListError(); }
     public function removeAt(index:int):* { return throwEmptyListError(); }
     public function set(index:int, o:*):* { return throwEmptyListError(); }
+    public function swap(i:int, j:int):void { throwEmptyListError(); }
     public function removeRange(fromIndex:int, toIndex:int):void { throwEmptyListError(); }
     public function add(o:*):Boolean { return throwEmptyListError(); }
     public function addAll(c:Collection):Boolean { return throwEmptyListError(); }

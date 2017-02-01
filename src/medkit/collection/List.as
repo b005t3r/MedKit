@@ -131,6 +131,14 @@ public interface List extends Collection {
     function set(index:int, o:*):*;
 
     /**
+     * Swaps two elements of this list.
+     *
+     * @param i index of the first element
+     * @param j index of the other element
+     */
+    function swap(i:int, j:int):void
+
+    /**
      * Returns a view of the portion of this list between the specified fromIndex, inclusive, and toIndex, exclusive.
      * (If toIndex >= fromIndex, the returned list is empty.)
      *
