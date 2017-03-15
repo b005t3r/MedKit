@@ -11,6 +11,7 @@ import medkit.object.Equalable;
 import medkit.object.ObjectInputStream;
 import medkit.object.ObjectOutputStream;
 import medkit.object.ObjectUtil;
+import medkit.string.StringBuilder;
 
 public class HashMultiSet extends AbstractSet implements MultiSet {
     private var map:HashMap;
@@ -324,6 +325,36 @@ public class HashMultiSet extends AbstractSet implements MultiSet {
 
     override public function writeObject(output:ObjectOutputStream):void {
         output.writeObject(map, "map");
+    }
+
+    public override function toString():String {
+        var i:Iterator = iterator();
+
+        if (! i.hasNext())
+            return "[]";
+
+        var sb:StringBuilder = new StringBuilder();
+
+        sb.append('[');
+
+        while(true) {
+            var e:* = i.next();
+            var count:int = elementCount(e);
+
+            if(e === this)
+                sb.append("(this Collection)");
+            else if(count > 1)
+                sb.append(count).append("x").append(e != null ? e : "null");
+            else
+                sb.append(e != null ? e : "null");
+
+            if (! i.hasNext())
+                break;
+
+            sb.append(", ");
+        }
+
+        return sb.append(']').toString();
     }
 }
 }
