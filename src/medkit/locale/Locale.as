@@ -31,7 +31,7 @@ import medkit.util.JsonFormatter;
  *     }
  * </code>
  *
- * and us it in your code, like so:
+ * and use it in your code, like so:
  * <code>
  *     myMenu.title         = String(MenuTexts.Title);
  *     myMenu.description   = String(MenuTexts.Description);
