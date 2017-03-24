@@ -28,7 +28,7 @@ public class Point2D extends Point implements Hashable, Spatial, Serializable {
 
     /** Stores a Point instance in the pool.
      *  Don't keep any references to the object after moving it to the pool! */
-    public static function putPoint(point:Point):void
+    public static function putPoint(point:Point2D):void
     {
         if (point) sPoints[sPoints.length] = point;
     }
