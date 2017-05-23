@@ -25,6 +25,27 @@ public class Rectangle2D extends Rectangle implements Shape2D, Hashable, Spatial
 
     private static const _tempRect:Rectangle2D = new Rectangle2D();
 
+    private static var rectanglePool:Vector.<Rectangle2D> = new <Rectangle2D>[];
+
+    /** Retrieves a Rectangle2D instance from the pool. */
+    public static function getRectangle(x:Number = 0, y:Number = 0, w:Number = 0, h:Number = 0):Rectangle2D {
+        if (rectanglePool.length == 0)
+            return new Rectangle2D(x, y, w, h);
+
+        var rectangle:Rectangle2D = rectanglePool.pop();
+        rectangle.x = x; rectangle.y = y; rectangle.width =  w; rectangle.height = h;
+        return rectangle;
+    }
+
+    /** Stores a Rectangle2D instance in the pool.
+     *  Don't keep any references to the object after moving it to the pool! */
+    public static function putRectangle(rectangle:Rectangle2D):void {
+        if (rectangle == null)
+            throw new ArgumentError("cannot put back null");
+
+        rectanglePool[rectanglePool.length] = rectangle;
+    }
+
     public function Rectangle2D(x:Number = 0, y:Number = 0, width:Number = 0, height:Number = 0) {
         super(x, y, width, height);
     }

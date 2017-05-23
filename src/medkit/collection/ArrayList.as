@@ -15,6 +15,34 @@ import medkit.object.ObjectOutputStream;
 import medkit.object.ObjectUtil;
 
 public class ArrayList extends AbstractList {
+    private static var listPool:Vector.<ArrayList> = new <ArrayList>[];
+
+    /** Retrieves a ArrayList instance from the pool. */
+    public static function getList():ArrayList {
+        if (listPool.length == 0)
+            return new ArrayList();
+
+        var list:ArrayList = listPool.pop();
+        return list;
+    }
+
+    /** Stores a ArrayList instance in the pool.
+     *  Don't keep any references to the object after moving it to the pool! */
+    public static function putList(list:ArrayList):void {
+        if (list == null)
+            throw new ArgumentError("cannot put back null");
+
+        if(list.size() > 100) {
+            list.clear();
+            list.trimToSize();
+        }
+        else {
+            list.clear();
+        }
+
+        listPool[listPool.length] = list;
+    }
+
     internal var elementData:Array;
     private var _size:int;
 

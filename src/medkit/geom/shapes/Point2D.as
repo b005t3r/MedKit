@@ -13,24 +13,26 @@ import medkit.object.ObjectOutputStream;
 import medkit.object.Serializable;
 
 public class Point2D extends Point implements Hashable, Spatial, Serializable {
-    private static var sPoints:Vector.<Point2D> = new <Point2D>[];
+    private static var pointPool:Vector.<Point2D> = new <Point2D>[];
 
-    /** Retrieves a Point instance from the pool. */
-    public static function getPoint(x:Number = 0, y:Number = 0):Point2D
-    {
-        if (sPoints.length == 0)
+    /** Retrieves a Point2D instance from the pool. */
+    public static function getPoint(x:Number = 0, y:Number = 0):Point2D {
+        if (pointPool.length == 0)
             return new Point2D(x, y);
 
-        var point:Point2D = sPoints.pop();
+        var point:Point2D = pointPool.pop();
         point.x = x; point.y = y;
+
         return point;
     }
 
-    /** Stores a Point instance in the pool.
+    /** Stores a Point2D instance in the pool.
      *  Don't keep any references to the object after moving it to the pool! */
-    public static function putPoint(point:Point2D):void
-    {
-        if (point) sPoints[sPoints.length] = point;
+    public static function putPoint(point:Point2D):void {
+        if (point == null)
+            throw new ArgumentError("cannot put back null");
+
+        pointPool[pointPool.length] = point;
     }
 
     public function Point2D(x:Number = 0, y:Number = 0) {
