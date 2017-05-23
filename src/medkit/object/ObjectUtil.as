@@ -12,6 +12,7 @@ import flash.utils.Dictionary;
 
 import medkit.collection.ArrayUtil;
 import medkit.object.error.CloneNotRegisteredError;
+import medkit.string.StringBuilder;
 
 public class ObjectUtil {
     public static function equals(o1:*, o2:*):Boolean {
@@ -374,6 +375,27 @@ public class ObjectUtil {
         }
 
         return null;
+    }
+
+    public static function objectToString(o:Object):String {
+        if(o == null)
+            return "null";
+        else if(getClass(o) != Object)
+            return String(o);
+
+        var strBuilder:StringBuilder = new StringBuilder();
+        strBuilder.append("Object {");
+
+        for(var propName:String in o) {
+            if(! o.hasOwnProperty(propName))
+                continue;
+
+            var prop:* = o[propName];
+
+            strBuilder.append(propName).append("=").append(objectToString(prop));
+        }
+
+        return strBuilder.append("}").toString();
     }
 }
 }
