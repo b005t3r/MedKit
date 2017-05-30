@@ -16,7 +16,7 @@ public interface Randomizer {
     function nextNumberInRange(min:Number, max:Number):Number;
 
     /** Get normal (Gaussian) random sample with specified mean and standard deviation. */
-    function nextNormal(mean:Number = 0, standardDeviation:Number = 1):Number;
+    function nextNormal(mean:Number = 0, standardDeviation:Number = 1, maximumDeviation:Number = NaN):Number;
 
     /** Get exponential random sample with specified mean. */
     function nextExponential(mean:Number = 1):Number;

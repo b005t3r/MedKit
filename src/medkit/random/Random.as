@@ -4,6 +4,8 @@
  * Time: 8:55
  */
 package medkit.random {
+import medkit.math.MathUtil;
+
 /**
  * SimpleRNG is a simple random number generator based on George Marsaglia's MWC (multiply with carry) generator.
  * Although it is very simple, it passes Marsaglia's DIEHARD series of random number generator tests.
@@ -88,7 +90,7 @@ public class Random implements Randomizer {
         return min + n * (max - min);
     }
 
-    public function nextNormal(mean:Number = 0, standardDeviation:Number = 1):Number {
+    public function nextNormal(mean:Number = 0, standardDeviation:Number = 1, maximumDeviation:Number = NaN):Number {
         if(standardDeviation <= 0.0)
             throw new ArgumentError("Shape must be positive. Received: " + standardDeviation);
 
@@ -100,7 +102,11 @@ public class Random implements Randomizer {
 
         var retVal:Number = r * Math.sin(theta);
 
-        return mean + standardDeviation * retVal;
+        // isNaM
+        if(maximumDeviation != maximumDeviation)
+            return mean + standardDeviation * retVal;
+        else
+            return mean + MathUtil.between(standardDeviation * retVal, -maximumDeviation, maximumDeviation);
     }
 
     public function nextExponential(mean:Number = 1):Number {
